@@ -386,9 +386,6 @@
         <div style="display:flex; flex-direction:column; gap:8px;">
           <button id="start-btn" type="button" class="btn btn-primary hidden">Mulai Petualangan</button>
           <button id="skip-intro-btn" type="button" class="btn btn-secondary" style="background:transparent; text-decoration:underline;">Lewati Intro</button>
-          <button id="dev-skip-c3-btn" type="button" class="btn btn-secondary" style="font-size:0.75rem; opacity:0.7; border:1px dashed #475569;">
-            ⚡ Langsung ke Chapter 3 (Sidang Agung)
-          </button>
         </div>
       </div>
     </div>
@@ -1624,34 +1621,6 @@ function triggerCourtAction() {
         </div>
       `;
     }
-
-    function skipToChapter3() {
-      const startScreen = document.getElementById("start-screen");
-      if (startScreen) startScreen.style.display = "none";
-      startGameAudio();
-
-      gameState.c1.drawerUnlocked = true;
-      gameState.c1.windowOpen = true;
-      gameState.c1.avgCalculated = true;
-      gameState.c1.outlierIdentified = true;
-      gameState.c1.solved = true;
-
-      gameState.c2.rune1 = true;
-      gameState.c2.rune2 = true;
-      gameState.c2.reviewedC1 = true;
-      gameState.c2.scaleBiasFound = true;
-      gameState.c2.presented = true;
-
-      addLog("Pintasan digunakan: Langsung menuju Chapter 3 (Sidang Agung).");
-      loadChapter3();
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const skipC3Btn = document.getElementById("dev-skip-c3-btn");
-      if (skipC3Btn) {
-        skipC3Btn.addEventListener("click", skipToChapter3);
-      }
-    });
   </script>
 </body>
 </html>
