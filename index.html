@@ -1186,10 +1186,16 @@ function submitC3Quiz(stage, choice) {
       gameState.chapter = "outro";
       chapterDisplay.innerText = "Selesai: Penghakiman";
       
-      const remainingSec = gameState.timerSec;
-      const m = String(Math.floor(remainingSec / 60)).padStart(2, "0");
-      const s = String(remainingSec % 60).padStart(2, "0");
-      timerDisplay.innerText = `Selesai: ${m}:${s}`;
+      // Total alokasi waktu 3 bab = 3 x 8 menit = 24 menit (1440 detik)
+      const totalSaved = gameState.savedTimeSec || 0;
+      const totalAllocatedSec = 3 * 8 * 60; 
+      const usedSec = Math.max(0, totalAllocatedSec - totalSaved);
+
+      // Format Waktu Digunakan (Menit:Detik)
+      const usedM = String(Math.floor(usedSec / 60)).padStart(2, "0");
+      const usedS = String(usedSec % 60).padStart(2, "0");
+
+      timerDisplay.innerText = `Waktu: ${usedM}:${usedS}`;
       
       sceneCanvas.classList.add("hidden");
       logPanel.classList.add("hidden");
@@ -1222,7 +1228,7 @@ function submitC3Quiz(stage, choice) {
         feedback = "Luar biasa tanpa cela! Integritas Siri' terjaga murni dan keadilan statistik tegak sempurna di seluruh kerajaan.";
       }
 
-      // Evaluasi Lencana Khusus (Secret Badges)
+      // Evaluasi Lencana Khusus
       let badgesHTML = "";
       let earnedBadges = [];
 
@@ -1239,15 +1245,14 @@ function submitC3Quiz(stage, choice) {
         `);
       }
 
-    const totalSaved = gameState.savedTimeSec || 0;
-      if (totalSaved >= 480) { // Ganti ke 600 jika ingin standar 10 menit
-        const savedMin = Math.floor(totalSaved / 60);
+      // Lencana 2: Penyelidik Gesit (Total Waktu Digunakan <= 10 Menit / 600 Detik)
+      if (usedSec <= 600) {
         earnedBadges.push(`
           <div class="badge-card">
             <span class="badge-icon">⚡</span>
             <div style="text-align: left;">
               <div class="badge-title">Penyelidik Gesit</div>
-              <div class="badge-desc">Deduksi kilat! Mengumpulkan total sisa waktu ${savedMin}+ menit dari seluruh bab.</div>
+              <div class="badge-desc">Deduksi kilat! Menyelesaikan seluruh bab hanya dalam waktu ${usedM}:${usedS}.</div>
             </div>
           </div>
         `);
@@ -1276,7 +1281,7 @@ function submitC3Quiz(stage, choice) {
                 ★ ${title} ★
               </div>
               <div style="font-size: 0.92rem; color: #f8fafc; margin-bottom: 6px;">
-                Sisa Nilai Siri': <strong style="color: ${titleColor};">${gameState.siri}%</strong> | Sisa Waktu: <strong>${m}:${s}</strong>
+                Sisa Nilai Siri': <strong style="color: ${titleColor};">${gameState.siri}%</strong> | Waktu Digunakan: <strong>${usedM}:${usedS}</strong>
               </div>
               <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; margin: 0;">
                 ${feedback}
