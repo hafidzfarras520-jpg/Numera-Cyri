@@ -292,6 +292,41 @@
     }
     
     .hidden { display: none !important; }
+    .stamp-overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-14deg) scale(3);
+      border: 6px double #dc2626;
+      color: #dc2626;
+      font-family: 'Impact', 'Segoe UI Black', sans-serif;
+      font-size: 2.8rem;
+      letter-spacing: 6px;
+      padding: 10px 24px;
+      text-transform: uppercase;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      box-shadow: 0 0 25px rgba(220, 38, 38, 0.6);
+      pointer-events: none;
+      z-index: 10000;
+      opacity: 0;
+      animation: stampSlam 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes stampSlam {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(-25deg) scale(3.5);
+      }
+      80% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(-12deg) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(-14deg) scale(1);
+      }
+    }
   </style>
 </head>
 <body>
@@ -336,6 +371,7 @@
       buku: new Audio('buku.mp4'),
       grafik: new Audio('grafik.mp4'),
       lampu: new Audio('lampu.mp4')
+    stamp: new Audio('stamp.mp4')
     };
 
     // Pengaturan BGM
@@ -985,7 +1021,7 @@ function viewGraphBiasInfo() {
       }
     }
 
-    function submitC3Quiz(stage, choice) {
+function submitC3Quiz(stage, choice) {
   if (stage === 1) {
     if (choice === 'mustahil') {
       playSound('correct'); // <--- Audio Jawaban Benar
@@ -1019,11 +1055,22 @@ function viewGraphBiasInfo() {
     }
   } else {
     if (choice === 'benar') {
-      playSound('correct'); // <--- Audio Jawaban Benar
       gameState.c3.solved = true;
       clearInterval(gameState.timerInterval);
-      addLog("Bab 3 Selesai.");
-      showModal("Vonis Ditegakkan!", `<div class="book-card" style="border-left-color: var(--accent-green);">Sempurna! Adipati resmi dijatuhi hukuman dan seluruh pasokan pangan dikembalikan ke rakyat yang berhak.</div>`, "Buka Kemenangan ➔", () => { closeModal(); loadOutro(); });
+      addLog("Bab 3 Selesai: Vonis dijatuhkan.");
+
+      // Efek stempel bukti sah sebelum vonis ditampilkan
+      triggerStampEffect(() => {
+        playSound('correct');
+        showModal(
+          "Vonis Ditegakkan!",
+          `<div class="book-card" style="border-left-color: var(--accent-green);">
+            Sempurna! Dengan stempel bukti sah, Adipati resmi dijatuhi hukuman dan seluruh pasokan pangan dikembalikan ke rakyat yang berhak.
+          </div>`,
+          "Buka Kemenangan ➔",
+          () => { closeModal(); loadOutro(); }
+        );
+      });
     } else {
       playSound('wrong'); // <--- Audio Jawaban Salah
       updateSiri(-10);
@@ -1036,6 +1083,20 @@ function viewGraphBiasInfo() {
     }
   }
 }
+    function triggerStampEffect(callback) {
+      playSound('stamp');
+      
+      const stampEl = document.createElement('div');
+      stampEl.className = 'stamp-overlay';
+      stampEl.innerText = 'BUKTI SAH';
+      document.body.appendChild(stampEl);
+
+      // Beri jeda 800ms agar pemain menikmati efeknya sebelum membuka modal
+      setTimeout(() => {
+        stampEl.remove();
+        if (callback) callback();
+      }, 800);
+    }
 
     /* =========================================================
        5. OUTRO
