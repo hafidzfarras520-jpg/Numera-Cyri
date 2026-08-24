@@ -327,6 +327,80 @@
         transform: translate(-50%, -50%) rotate(-14deg) scale(1);
       }
     }
+    #sceneCanvas {
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Efek pendaran cahaya lilin berkedip di pojok-pojok canvas */
+    #sceneCanvas::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+      background: radial-gradient(circle at 15% 85%, rgba(245, 158, 11, 0.22) 0%, transparent 45%),
+                  radial-gradient(circle at 85% 15%, rgba(217, 119, 6, 0.18) 0%, transparent 40%);
+      animation: candleFlicker 3s infinite alternate ease-in-out;
+    }
+
+    @keyframes candleFlicker {
+      0% {
+        opacity: 0.7;
+        filter: brightness(0.95);
+      }
+      50% {
+        opacity: 1;
+        filter: brightness(1.15);
+      }
+      100% {
+        opacity: 0.8;
+        filter: brightness(1);
+      }
+    }
+
+    /* =========================================================
+       LENCANA KHUSUS (SECRET BADGES) DI OUTRO
+       ========================================================= */
+    .badges-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 12px 0 16px 0;
+    }
+
+    .badge-card {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--accent-gold);
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 10px rgba(234, 179, 8, 0.2);
+      animation: badgePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .badge-icon {
+      font-size: 1.5rem;
+    }
+
+    .badge-title {
+      font-weight: bold;
+      color: var(--accent-gold);
+      font-size: 0.88rem;
+    }
+
+    .badge-desc {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    @keyframes badgePop {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -401,7 +475,8 @@
       hintTimeout: null,
       c1: { stage: 1, solved: false },
       c2: { stage: 1, solved: false },
-      c3: { stage: 1, solved: false }
+      c3: { stage: 1, solved: false },
+      savedTimeSec: 0
     };
 
     const sceneCanvas = document.getElementById("scene-canvas");
@@ -500,14 +575,15 @@
        1. INTRO
        ========================================================= */
 function loadIntro() {
-      document.body.classList.remove("critical-siri"); // Reset efek redup
-      gameState.chapter = "intro";
-      gameState.siri = 100;
-      gameState.c1.stage = 1; gameState.c1.solved = false;
-      gameState.c2.stage = 1; gameState.c2.solved = false;
-      gameState.c3.stage = 1; gameState.c3.solved = false;
-      clearInterval(gameState.timerInterval);
-      clearTimeout(gameState.hintTimeout);
+  document.body.classList.remove("critical-siri"); // Reset efek redup
+  gameState.chapter = "intro";
+  gameState.siri = 100;
+  gameState.savedTimeSec = 0; // <--- Reset total akumulasi waktu di sini
+  gameState.c1.stage = 1; gameState.c1.solved = false;
+  gameState.c2.stage = 1; gameState.c2.solved = false;
+  gameState.c3.stage = 1; gameState.c3.solved = false;
+  clearInterval(gameState.timerInterval);
+  clearTimeout(gameState.hintTimeout);
       
       updateSiri(0); 
       chapterDisplay.innerText = "Pendahuluan";
@@ -703,6 +779,7 @@ function viewDocB() {
     if (choice === 'benar') {
       playSound('correct'); // <--- Audio Jawaban Benar
       gameState.c1.solved = true;
+      gameState.savedTimeSec = (gameState.savedTimeSec || 0) + gameState.timerSec; // <--- DI SINI
       addLog("Bab 1 Selesai: Kesimpulan tuntas.");
       showModal("Evaluasi Bab 1 Selesai!", `<div class="book-card" style="border-left-color: var(--accent-green);">Penyelidikan sempurna! Kamu telah memahami bagaimana Rata-rata (Mean) bisa menyembunyikan ketimpangan jika di dalamnya ada Pencilan (Outlier).</div>`, "Buka Bab 2 ➔", () => { closeModal(); loadChapter2(); });
     } else {
@@ -901,6 +978,7 @@ function viewGraphBiasInfo() {
     if (choice === 'benar') {
       playSound('correct'); // <--- Audio Jawaban Benar
       gameState.c2.solved = true;
+      gameState.savedTimeSec = (gameState.savedTimeSec || 0) + gameState.timerSec; // <--- Simpan sisa waktu Bab 2
       addLog("Bab 2 Selesai.");
       showModal("Evaluasi Bab 2 Selesai!", `<div class="book-card" style="border-left-color: var(--accent-green);">Sangat kritis! Kita tetap mengakui keberadaan data pencilan 212, namun kita tidak membiarkan nilai tersebut menyesatkan simpulan untuk sisa kelompok.</div>`, "Buka Bab 3 ➔", () => { closeModal(); loadChapter3(); });
     } else {
@@ -1057,6 +1135,7 @@ function submitC3Quiz(stage, choice) {
     if (choice === 'benar') {
       gameState.c3.solved = true;
       clearInterval(gameState.timerInterval);
+      gameState.savedTimeSec = (gameState.savedTimeSec || 0) + gameState.timerSec; // <--- Simpan sisa waktu Bab 3
       addLog("Bab 3 Selesai: Vonis dijatuhkan.");
 
       // Efek stempel bukti sah sebelum vonis ditampilkan
@@ -1102,17 +1181,20 @@ function submitC3Quiz(stage, choice) {
        5. OUTRO
        ========================================================= */
     function loadOutro() {
-      // RESET / UPDATE Game State & BGM
       stopBGM();
       gameState.chapter = "outro";
       chapterDisplay.innerText = "Selesai: Penghakiman";
-      timerDisplay.innerText = "Waktu: --:--";
+      
+      const remainingSec = gameState.timerSec;
+      const m = String(Math.floor(remainingSec / 60)).padStart(2, "0");
+      const s = String(remainingSec % 60).padStart(2, "0");
+      timerDisplay.innerText = `Selesai: ${m}:${s}`;
       
       sceneCanvas.classList.add("hidden");
       logPanel.classList.add("hidden");
       gameBody.classList.add("full-width-body");
 
-      // Penentuan Gelar, Warna, dan Ulasan berdasarkan Sisa Siri'
+      // Penentuan Gelar, Warna, dan Ulasan
       let title = "";
       let titleColor = "";
       let feedback = "";
@@ -1134,10 +1216,51 @@ function submitC3Quiz(stage, choice) {
         titleColor = "var(--accent-cyan)";
         feedback = "Sangat tajam! Manipulasi sumbu dan pemalsuan waktu berhasil dibongkar dengan bukti kokoh.";
       } else {
-        // 90 - 100%
         title = "Penyelidik Mahir Siri'";
         titleColor = "var(--accent-gold)";
         feedback = "Luar biasa tanpa cela! Integritas Siri' terjaga murni dan keadilan statistik tegak sempurna di seluruh kerajaan.";
+      }
+
+      // Evaluasi Lencana Khusus (Secret Badges)
+      let badgesHTML = "";
+      let earnedBadges = [];
+
+      // Lencana 1: Mata Rajawali (Siri' 100% tanpa salah)
+      if (gameState.siri === 100) {
+        earnedBadges.push(`
+          <div class="badge-card">
+            <span class="badge-icon">🦅</span>
+            <div style="text-align: left;">
+              <div class="badge-title">Mata Rajawali</div>
+              <div class="badge-desc">Menjawab sempurna tanpa satupun kesalahan (Siri' 100%).</div>
+            </div>
+          </div>
+        `);
+      }
+
+    const totalSaved = gameState.savedTimeSec || 0;
+      if (totalSaved >= 480) { // Ganti ke 600 jika ingin standar 10 menit
+        const savedMin = Math.floor(totalSaved / 60);
+        earnedBadges.push(`
+          <div class="badge-card">
+            <span class="badge-icon">⚡</span>
+            <div style="text-align: left;">
+              <div class="badge-title">Penyelidik Gesit</div>
+              <div class="badge-desc">Deduksi kilat! Mengumpulkan total sisa waktu ${savedMin}+ menit dari seluruh bab.</div>
+            </div>
+          </div>
+        `);
+      }
+
+      if (earnedBadges.length > 0) {
+        badgesHTML = `
+          <div style="margin-top: 14px;">
+            <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Lencana Penghargaan Diperoleh:</div>
+            <div class="badges-container">
+              ${earnedBadges.join("")}
+            </div>
+          </div>
+        `;
       }
 
       leftPanel.innerHTML = `
@@ -1152,11 +1275,12 @@ function submitC3Quiz(stage, choice) {
                 ★ ${title} ★
               </div>
               <div style="font-size: 0.92rem; color: #f8fafc; margin-bottom: 6px;">
-                Sisa Nilai Siri': <strong style="color: ${titleColor};">${gameState.siri}%</strong>
+                Sisa Nilai Siri': <strong style="color: ${titleColor};">${gameState.siri}%</strong> | Sisa Waktu: <strong>${m}:${s}</strong>
               </div>
               <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; margin: 0;">
                 ${feedback}
               </p>
+              ${badgesHTML}
             </div>
 
             <!-- Rangkuman Buku Catatan -->
