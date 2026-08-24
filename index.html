@@ -520,11 +520,19 @@
         if (gameState.siri <= 0) {
           document.body.classList.remove("critical-siri");
           stopBGM();
-          playSound('gameOver');
+          playSound('gameOver'); // Putar audio game over
           clearInterval(gameState.timerInterval);
           clearTimeout(gameState.hintTimeout);
-          alert("Siri' Kerajaan Hancur! Game Over.");
-          location.reload();
+          
+          // Tampilkan modal kekalahan dengan tombol coba lagi (agar audio tidak terputus)
+          showModal(
+            "<span style='color:var(--accent-red);'>Siri' Runtuh! Game Over</span>",
+            `<div class="book-card" style="border-left-color:var(--accent-red);">
+              Nilai Siri' kerajaan telah habis ($0\\%$). Kehormatan dan integritas data gagal diselamatkan.
+            </div>`,
+            "Ulangi Investigasi ↺",
+            () => { closeModal(); loadIntro(); }
+          );
         }
       }
     }
@@ -540,12 +548,22 @@
         if (gameState.timerSec <= 0) {
           clearInterval(gameState.timerInterval);
           stopBGM();
-          playSound('gameOver');
-          onExpire();
+          playSound('gameOver'); // Putar audio game over
+          if (onExpire) {
+            onExpire();
+          } else {
+            showModal(
+              "<span style='color:var(--accent-red);'>Waktu Habis!</span>",
+              `<div class="book-card" style="border-left-color:var(--accent-red);">
+                Waktu penyelidikan telah habis. Kebenaran gagal diungkap tepat waktu.
+              </div>`,
+              "Ulangi Investigasi ↺",
+              () => { closeModal(); loadIntro(); }
+            );
+          }
         }
       }, 1000);
     }
-
     function triggerSiriHint(text) {
       clearTimeout(gameState.hintTimeout);
       // Muncul di menit ke-4
@@ -635,7 +653,7 @@ function loadIntro() {
       sceneCanvas.style.backgroundImage = "url('11.png')";
 
       addLog("Bab 1 dimulai: Menyelidiki Berkas Pasokan.");
-      startTimer(8, () => { alert("Waktu Habis!"); location.reload(); });
+startTimer(8);
       triggerSiriHint("Lihatlah jurang pemisah antara 47 dan 212. Angka yang berdiri terpencil ini punya sebutan khusus.");
 
       leftPanel.innerHTML = `
@@ -806,7 +824,7 @@ function viewDocB() {
       sceneCanvas.style.backgroundImage = "url('22.png')";
 
       addLog("Bab 2 dimulai: Aula Presentasi Grafik.");
-      startTimer(8, () => { alert("Waktu Habis!"); location.reload(); });
+startTimer(8);
       clearTimeout(gameState.hintTimeout);
       triggerSiriHint("Bentuk grafik boleh apa saja, tapi cara mereka memotong skala sumbu itulah sumber manipulasinya.");
 
@@ -1005,7 +1023,7 @@ function viewGraphBiasInfo() {
       sceneCanvas.style.backgroundImage = "url('31.png')";
 
       addLog("Bab 3 dimulai: Sidang Pembuktian.");
-      startTimer(8, () => { alert("Waktu Habis!"); location.reload(); });
+startTimer(8);
       clearTimeout(gameState.hintTimeout);
       triggerSiriHint("Banyak hal terjadi bersamaan (Korelasi). Kausalitas butuh bukti fisik pengikat dan urutan waktu yang pasti.");
 
