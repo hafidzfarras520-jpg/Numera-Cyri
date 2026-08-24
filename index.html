@@ -305,6 +305,35 @@
   </div>
 
   <script>
+  const sounds = {
+      bgm: new Audio('bgm.mp3'),
+      gameOver: new Audio('gameover.mp3'),
+      correct: new Audio('correct.mp3'),
+      wrong: new Audio('wrong.mp3'),
+      buku: new Audio('buku.mp3'),
+      grafik: new Audio('grafik.mp3'),
+      lampu: new Audio('lampu.mp3')
+    };
+
+    // Pengaturan BGM
+    sounds.bgm.loop = true;
+    sounds.bgm.volume = 0.4;
+
+    function playSound(name) {
+      if (sounds[name]) {
+        sounds[name].currentTime = 0;
+        sounds[name].play().catch(() => {});
+      }
+    }
+
+    function playBGM() {
+      sounds.bgm.play().catch(() => {});
+    }
+
+    function stopBGM() {
+      sounds.bgm.pause();
+      sounds.bgm.currentTime = 0;
+    }
     const gameState = {
       chapter: "intro",
       siri: 100,
