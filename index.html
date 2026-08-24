@@ -624,6 +624,7 @@ function loadIntro() {
        2. BAB 1: SEBARAN DATA & PENCILAN (OUTLIER)
        ========================================================= */
     function loadChapter1() {
+      playBGM(); // <--- TAMBAHKAN INI AGAR MUSIK MULAI BERPUTAR
       gameState.chapter = "c1";
       gameState.c1.stage = 1;
       chapterDisplay.innerText = "Bab 1";
