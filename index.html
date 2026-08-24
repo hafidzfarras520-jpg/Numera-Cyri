@@ -1010,25 +1010,71 @@ function viewGraphBiasInfo() {
        5. OUTRO
        ========================================================= */
     function loadOutro() {
+      // RESET / UPDATE Game State & BGM
+      stopBGM();
       gameState.chapter = "outro";
-      chapterDisplay.innerText = "Selesai";
-      timerDisplay.innerText = "Selesai";
+      chapterDisplay.innerText = "Selesai: Penghakiman";
+      timerDisplay.innerText = "Waktu: --:--";
       
       sceneCanvas.classList.add("hidden");
       logPanel.classList.add("hidden");
       gameBody.classList.add("full-width-body");
 
+      // Penentuan Gelar, Warna, dan Ulasan berdasarkan Sisa Siri'
+      let title = "";
+      let titleColor = "";
+      let feedback = "";
+
+      if (gameState.siri === 0) {
+        title = "Integritas Runtuh (Gagal)";
+        titleColor = "var(--accent-red)";
+        feedback = "Kecurangan menang. Kesucian Siri' kerajaan hancur akibat banyaknya kesalahan analisis.";
+      } else if (gameState.siri >= 10 && gameState.siri <= 30) {
+        title = "Penyelidik Ceroboh";
+        titleColor = "#f87171";
+        feedback = "Kasus terselesaikan dengan susah payah. Banyak bukti dan kausalitas yang sempat salah ditafsirkan.";
+      } else if (gameState.siri >= 40 && gameState.siri <= 60) {
+        title = "Pemberantas Bias Pemula";
+        titleColor = "#fde047";
+        feedback = "Analisis cukup baik. Kamu berhasil melihat trik manipulasi grafik dan pencilan data.";
+      } else if (gameState.siri >= 70 && gameState.siri <= 80) {
+        title = "Penjaga Kebenaran Data";
+        titleColor = "var(--accent-cyan)";
+        feedback = "Sangat tajam! Manipulasi sumbu dan pemalsuan waktu berhasil dibongkar dengan bukti kokoh.";
+      } else {
+        // 90 - 100%
+        title = "Penyelidik Mahir Siri'";
+        titleColor = "var(--accent-gold)";
+        feedback = "Luar biasa tanpa cela! Integritas Siri' terjaga murni dan keadilan statistik tegak sempurna di seluruh kerajaan.";
+      }
+
       leftPanel.innerHTML = `
         <div class="intro-hero-panel" style="text-align: center;">
           <div class="intro-content">
             <h2 style="color: var(--accent-green); margin-bottom: 8px; font-family:'Segoe UI', sans-serif;">🎉 Kemakmuran Kerajaan Pulih</h2>
-            <p style="color: #cbd5e1; margin-bottom: 14px;">Nilai Siri' dan kejujuran data kerajaan berhasil diselamatkan 100%.</p>
+            
+            <!-- Kotak Gelar Hasil Investigasi -->
+            <div class="book-card" style="border-left-color: ${titleColor}; background: rgba(15,23,42,0.95); max-width: 600px; margin: 0 auto 16px auto; text-align: left;">
+              <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Evaluasi Penyelidik:</div>
+              <div style="font-size: 1.25rem; font-weight: bold; color: ${titleColor}; margin: 4px 0 6px 0;">
+                ★ ${title} ★
+              </div>
+              <div style="font-size: 0.92rem; color: #f8fafc; margin-bottom: 6px;">
+                Sisa Nilai Siri': <strong style="color: ${titleColor};">${gameState.siri}%</strong>
+              </div>
+              <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; margin: 0;">
+                ${feedback}
+              </p>
+            </div>
+
+            <!-- Rangkuman Buku Catatan -->
             <div class="book-card" style="text-align: left; max-width: 600px; margin: 0 auto 16px auto;">
               <strong>Buku Catatan Literasi Data Selesai Ditulis:</strong><br><br>
               • <strong>Bab 1:</strong> Memahami sebaran data, menghitung rentang, dan mendeteksi bahaya angka <strong>Pencilan (Outlier)</strong> yang menarik rata-rata dan menutupi kekurangan pihak lain.<br><br>
               • <strong>Bab 2:</strong> Membongkar manipulasi pemotongan skala visual grafik, serta mengutamakan nilai <strong>Median</strong> agar titik tengah kebal terhadap angka ekstrem.<br><br>
               • <strong>Bab 3:</strong> Membuktikan <strong>Kausalitas (Sebab-Akibat)</strong> dengan memastikan adanya bukti mekanisme fisik dan sebab kronologis yang mendahului akibatnya.
             </div>
+
             <button class="btn-action" onclick="loadIntro()" style="max-width: 240px; margin: 0 auto;">Tutup Buku Catatan ➔</button>
           </div>
         </div>
