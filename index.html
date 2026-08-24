@@ -97,7 +97,30 @@
       border-bottom: 2px solid var(--border-color);
       overflow: hidden;
     }
+/* Efek Kritis Siri' Rendah (< 40%) */
+    body.critical-siri {
+      filter: brightness(0.85);
+      transition: filter 0.5s ease;
+    }
 
+    body.critical-siri::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      box-shadow: inset 0 0 70px 25px rgba(239, 68, 68, 0.45);
+      animation: pulseVignette 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pulseVignette {
+      0%, 100% {
+        opacity: 0.5;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
     .hotspot {
       position: absolute;
       cursor: pointer;
@@ -368,6 +391,13 @@
       gameState.siri = Math.max(0, Math.min(100, gameState.siri + amount));
       siriDisplay.innerText = `Siri': ${gameState.siri}%`;
       
+      // Pengecekan Efek Kritis (< 40%)
+      if (gameState.siri < 40 && gameState.siri > 0) {
+        document.body.classList.add("critical-siri");
+      } else {
+        document.body.classList.remove("critical-siri");
+      }
+
       if (gameState.siri === 100) {
         siriDisplay.style.borderColor = "var(--accent-cyan)";
         siriDisplay.style.color = "var(--accent-cyan)";
@@ -377,6 +407,7 @@
         siriDisplay.style.borderColor = "var(--accent-red)";
         siriDisplay.style.color = "var(--accent-red)";
         if (gameState.siri <= 0) {
+          document.body.classList.remove("critical-siri");
           stopBGM();
           playSound('gameOver');
           clearInterval(gameState.timerInterval);
@@ -433,7 +464,7 @@
        1. INTRO
        ========================================================= */
 function loadIntro() {
-      // RESET Game State
+      document.body.classList.remove("critical-siri"); // Reset efek redup
       gameState.chapter = "intro";
       gameState.siri = 100;
       gameState.c1.stage = 1; gameState.c1.solved = false;
