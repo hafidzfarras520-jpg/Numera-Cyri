@@ -29,7 +29,7 @@
       align-items: center;
       padding: 16px;
     }
-/* Kotak Grid Petunjuk Intro */
+
     .guide-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -47,6 +47,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       line-height: 1.5;
     }
+
     .game-container {
       width: 100%;
       max-width: 920px;
@@ -59,7 +60,6 @@
       flex-direction: column;
     }
 
-    /* Top Bar */
     .top-bar {
       background: #0f172a;
       padding: 12px 20px;
@@ -72,7 +72,6 @@
     }
 
     .top-bar h1 { font-size: 1.25rem; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px; font-weight: normal; }
-
     .stats-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-family: 'Segoe UI', sans-serif; }
     
     .badge {
@@ -87,7 +86,6 @@
     .badge-timer { background: rgba(239, 68, 68, 0.15); border-color: var(--accent-red); color: var(--accent-red); }
     .badge-chapter { background: rgba(251, 191, 36, 0.15); border-color: var(--accent-gold); color: var(--accent-gold); }
 
-    /* Scene Box & Hotspots */
     .scene-box {
       position: relative;
       width: 100%;
@@ -97,12 +95,8 @@
       border-bottom: 2px solid var(--border-color);
       overflow: hidden;
     }
-/* Efek Kritis Siri' Rendah (< 40%) */
-    body.critical-siri {
-      filter: brightness(0.85);
-      transition: filter 0.5s ease;
-    }
 
+    body.critical-siri { filter: brightness(0.85); transition: filter 0.5s ease; }
     body.critical-siri::after {
       content: "";
       position: fixed;
@@ -114,13 +108,10 @@
     }
 
     @keyframes pulseVignette {
-      0%, 100% {
-        opacity: 0.5;
-      }
-      50% {
-        opacity: 1;
-      }
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
     }
+
     .hotspot {
       position: absolute;
       cursor: pointer;
@@ -149,8 +140,9 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
     .quiz-hotspot .hotspot-label { color: var(--accent-gold); border-color: rgba(251, 191, 36, 0.5); }
+    .quiz-hotspot.locked { opacity: 0.6; }
+    .quiz-hotspot.locked .hotspot-label { color: #94a3b8; border-color: #64748b; }
 
-    /* Layout Konten */
     .game-body {
       padding: 18px 20px;
       display: grid;
@@ -173,7 +165,6 @@
     .log-list li { padding: 4px 0; border-bottom: 1px dashed #334155; line-height: 1.4; }
     .log-list li:first-child { color: var(--accent-cyan); }
 
-    /* Intro Hero */
     .intro-hero-panel {
       position: relative;
       border-radius: 16px;
@@ -209,7 +200,6 @@
     }
     .btn-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
 
-    /* Modal Pop-up */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -260,38 +250,8 @@
     }
     .quiz-option:hover { background: #1e293b; border-color: var(--accent-cyan); }
     
-    /* Grafik Batang CSS */
-    .bar-chart-container {
-      position: relative;
-      height: 160px;
-      border-bottom: 2px solid #64748b;
-      margin: 30px 0 30px 10px; 
-      width: 260px;
-    }
-    .chart-bars {
-      display: flex;
-      align-items: flex-end;
-      gap: 16px;
-      height: 100%;
-      padding-left: 10px;
-    }
-    .chart-bar { width: 36px; background: var(--accent-cyan); border-radius: 4px 4px 0 0; position: relative; }
-    .chart-bar.cut-bar { background: var(--accent-red); }
-    .bar-label { position: absolute; bottom: -24px; width: 100%; text-align: center; font-size: 0.75rem; color: #cbd5e1; }
-    
-    .cut-line-green {
-      position: absolute; left: 0; right: -80px;
-      border-top: 2px dashed var(--accent-green); z-index: 5;
-    }
-    .cut-line-white {
-      position: absolute; left: 0; right: -80px;
-      border-top: 2px dashed #f8fafc; z-index: 5;
-    }
-    .line-lbl {
-      position: absolute; right: -5px; top: -12px; font-size: 0.75rem; font-weight: bold; padding: 2px 6px; border-radius: 4px;
-    }
-    
     .hidden { display: none !important; }
+    
     .stamp-overlay {
       position: fixed;
       top: 50%;
@@ -314,25 +274,12 @@
     }
 
     @keyframes stampSlam {
-      0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) rotate(-25deg) scale(3.5);
-      }
-      80% {
-        opacity: 1;
-        transform: translate(-50%, -50%) rotate(-12deg) scale(0.95);
-      }
-      100% {
-        opacity: 1;
-        transform: translate(-50%, -50%) rotate(-14deg) scale(1);
-      }
-    }
-    #sceneCanvas {
-      position: relative;
-      overflow: hidden;
+      0% { opacity: 0; transform: translate(-50%, -50%) rotate(-25deg) scale(3.5); }
+      80% { opacity: 1; transform: translate(-50%, -50%) rotate(-12deg) scale(0.95); }
+      100% { opacity: 1; transform: translate(-50%, -50%) rotate(-14deg) scale(1); }
     }
 
-    /* Efek pendaran cahaya lilin berkedip di pojok-pojok canvas */
+    #sceneCanvas { position: relative; overflow: hidden; }
     #sceneCanvas::before {
       content: "";
       position: absolute;
@@ -345,23 +292,11 @@
     }
 
     @keyframes candleFlicker {
-      0% {
-        opacity: 0.7;
-        filter: brightness(0.95);
-      }
-      50% {
-        opacity: 1;
-        filter: brightness(1.15);
-      }
-      100% {
-        opacity: 0.8;
-        filter: brightness(1);
-      }
+      0% { opacity: 0.7; filter: brightness(0.95); }
+      50% { opacity: 1; filter: brightness(1.15); }
+      100% { opacity: 0.8; filter: brightness(1); }
     }
 
-    /* =========================================================
-       LENCANA KHUSUS (SECRET BADGES) DI OUTRO
-       ========================================================= */
     .badges-container {
       display: flex;
       flex-wrap: wrap;
@@ -381,26 +316,45 @@
       box-shadow: 0 0 10px rgba(234, 179, 8, 0.2);
       animation: badgePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
-
-    .badge-icon {
-      font-size: 1.5rem;
-    }
-
-    .badge-title {
-      font-weight: bold;
-      color: var(--accent-gold);
-      font-size: 0.88rem;
-    }
-
-    .badge-desc {
-      font-size: 0.75rem;
-      color: #94a3b8;
-    }
+    .badge-icon { font-size: 1.5rem; }
+    .badge-title { font-weight: bold; color: var(--accent-gold); font-size: 0.88rem; }
+    .badge-desc { font-size: 0.75rem; color: #94a3b8; }
 
     @keyframes badgePop {
       0% { transform: scale(0.7); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
     }
+
+    /* DRAG AND DROP ZONES (BAB 1) - Warna Netral Seragam */
+    .drag-bag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: #1e293b;
+      border: 1.5px solid #64748b;
+      color: #f8fafc;
+      border-radius: 6px;
+      cursor: grab;
+      font-weight: 500;
+      font-size: 0.85rem;
+      user-select: none;
+      touch-action: none;
+    }
+    .drag-bag:active { cursor: grabbing; opacity: 0.7; }
+    .drop-box {
+      border: 2px dashed #475569;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 8px;
+      padding: 10px;
+      min-height: 64px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .drop-box.drag-over { border-color: var(--accent-gold); background: rgba(251, 191, 36, 0.15); }
   </style>
 </head>
 <body>
@@ -437,7 +391,7 @@
   </div>
 
   <script>
-  const sounds = {
+    const sounds = {
       bgm: new Audio('bgm.mp4'),
       gameOver: new Audio('gameover.mp4'),
       correct: new Audio('correct.mp4'),
@@ -445,12 +399,11 @@
       buku: new Audio('buku.mp4'),
       grafik: new Audio('grafik.mp4'),
       lampu: new Audio('lampu.mp4'),
-    stamp: new Audio('stamp.mp4')
+      stamp: new Audio('stamp.mp4')
     };
 
-    // Pengaturan BGM
     sounds.bgm.loop = true;
-    sounds.bgm.volume = 0.7;
+    sounds.bgm.volume = 0.75;
 
     function playSound(name) {
       if (sounds[name]) {
@@ -459,23 +412,18 @@
       }
     }
 
-    function playBGM() {
-      sounds.bgm.play().catch(() => {});
-    }
+    function playBGM() { sounds.bgm.play().catch(() => {}); }
+    function stopBGM() { sounds.bgm.pause(); sounds.bgm.currentTime = 0; }
 
-    function stopBGM() {
-      sounds.bgm.pause();
-      sounds.bgm.currentTime = 0;
-    }
     const gameState = {
       chapter: "intro",
       siri: 100,
-      timerSec: 480, // 8 Menit
+      timerSec: 480,
       timerInterval: null,
       hintTimeout: null,
-      c1: { stage: 1, solved: false },
-      c2: { stage: 1, solved: false },
-      c3: { stage: 1, solved: false },
+      c1: { stage: 1, solved: false, ready: false },
+      c2: { stage: 1, solved: false, ready: false },
+      c3: { stage: 1, solved: false, ready: false },
       savedTimeSec: 0
     };
 
@@ -531,7 +479,7 @@
             "Ulangi Investigasi ↺",
             () => { closeModal(); loadIntro(); }
           );
-          return true; // Menandakan Game Over
+          return true;
         }
       }
       return false;
@@ -548,7 +496,7 @@
         if (gameState.timerSec <= 0) {
           clearInterval(gameState.timerInterval);
           stopBGM();
-          playSound('gameOver'); // Putar audio game over
+          playSound('gameOver');
           if (onExpire) {
             onExpire();
           } else {
@@ -564,9 +512,9 @@
         }
       }, 1000);
     }
+
     function triggerSiriHint(text) {
       clearTimeout(gameState.hintTimeout);
-      // Muncul di menit ke-4
       gameState.hintTimeout = setTimeout(() => {
         addLog("Roh Siri' membisikkan petunjuk penting.");
         showModal(
@@ -592,16 +540,16 @@
     /* =========================================================
        1. INTRO
        ========================================================= */
-function loadIntro() {
-  document.body.classList.remove("critical-siri"); // Reset efek redup
-  gameState.chapter = "intro";
-  gameState.siri = 100;
-  gameState.savedTimeSec = 0; // <--- Reset total akumulasi waktu di sini
-  gameState.c1.stage = 1; gameState.c1.solved = false;
-  gameState.c2.stage = 1; gameState.c2.solved = false;
-  gameState.c3.stage = 1; gameState.c3.solved = false;
-  clearInterval(gameState.timerInterval);
-  clearTimeout(gameState.hintTimeout);
+    function loadIntro() {
+      document.body.classList.remove("critical-siri");
+      gameState.chapter = "intro";
+      gameState.siri = 100;
+      gameState.savedTimeSec = 0;
+      gameState.c1.stage = 1; gameState.c1.solved = false; gameState.c1.ready = false;
+      gameState.c2.stage = 1; gameState.c2.solved = false; gameState.c2.ready = false;
+      gameState.c3.stage = 1; gameState.c3.solved = false; gameState.c3.ready = false;
+      clearInterval(gameState.timerInterval);
+      clearTimeout(gameState.hintTimeout);
       
       updateSiri(0); 
       chapterDisplay.innerText = "Pendahuluan";
@@ -621,13 +569,13 @@ function loadIntro() {
             <p style="font-weight:bold; margin-top:14px; color:var(--accent-cyan); font-family:'Segoe UI', sans-serif;">Panduan Investigasi:</p>
             <div class="guide-grid">
               <div class="guide-item">
-                <strong style="color:var(--accent-cyan);">❗ Tanda Seru & Highlight</strong><br>Menandai benda/dokumen yang berisi informasi kasus.
+                <strong style="color:var(--accent-cyan);">❗ Interaksi Barang Bukti</strong><br>Sortir karung pasokan, bongkar manipulasi grafik, dan buktikan kausalitas.
               </div>
               <div class="guide-item">
-                <strong style="color:var(--accent-gold);">★ Uji Pemahaman</strong><br>Item utama untuk menjawab kuis evaluasi.
+                <strong style="color:var(--accent-gold);">★ Uji Pemahaman</strong><br>Terkunci sampai kamu menyelesaikan penyelidikan bukti [ ! ].
               </div>
               <div class="guide-item">
-                <strong style="color:var(--accent-red);">🛡️ Nilai Siri' & Waktu</strong><br>Batas maksimal kesalahan dengan detikan timer 8 menit.
+                <strong style="color:var(--accent-red);">🛡️ Nilai Siri' & Waktu</strong><br>Batas maksimal kesalahan dengan detikan timer 8 menit per bab.
               </div>
               <div class="guide-item">
                 <strong style="color:#fde68a;">⏳ Roh Siri' & Log Jurnal</strong><br>Membisikkan petunjuk di menit ke-4 dan mencatat histori temuan.
@@ -638,13 +586,15 @@ function loadIntro() {
         </div>
       `;
     }
+
     /* =========================================================
        2. BAB 1: SEBARAN DATA & PENCILAN (OUTLIER)
        ========================================================= */
     function loadChapter1() {
-      playBGM(); // <--- TAMBAHKAN INI AGAR MUSIK MULAI BERPUTAR
+      playBGM();
       gameState.chapter = "c1";
       gameState.c1.stage = 1;
+      gameState.c1.ready = false;
       chapterDisplay.innerText = "Bab 1";
       
       sceneCanvas.classList.remove("hidden");
@@ -653,62 +603,137 @@ function loadIntro() {
       sceneCanvas.style.backgroundImage = "url('11.png')";
 
       addLog("Bab 1 dimulai: Menyelidiki Berkas Pasokan.");
-startTimer(8);
+      startTimer(8);
       triggerSiriHint("Lihatlah jurang pemisah antara 47 dan 212. Angka yang berdiri terpencil ini punya sebutan khusus.");
 
       leftPanel.innerHTML = `
         <div class="status-panel">
-          <strong>Status Penyelidikan:</strong> Bacalah catatan pasokan dan konsep rentang pada berkas <strong style="color:var(--accent-cyan);">[ ! ]</strong>, lalu selesaikan evaluasi di meja arsip <strong style="color:var(--accent-gold);">[ ★ ]</strong>.
+          <strong>Status Penyelidikan:</strong> Periksa dan sortir karung pasokan pada berkas <strong style="color:var(--accent-cyan);">[ ! ]</strong> untuk membuka sidang evaluasi meja arsip <strong style="color:var(--accent-gold);">[ ★ ]</strong>.
         </div>
       `;
 
+      renderChapter1Hotspots();
+    }
+
+    function renderChapter1Hotspots() {
+      const quizLockedClass = gameState.c1.ready ? "" : "locked";
+      const quizLabel = gameState.c1.ready ? "★ Evaluasi Bab 1" : "🔒 Evaluasi (Terkunci)";
+      
       sceneCanvas.innerHTML = `
         <div class="hotspot" style="top: 65%; left: 14%; width: 22%; height: 26%;" onclick="viewDocA()">
-          <span class="hotspot-label">❗ Pasokan Pangan</span>
+          <span class="hotspot-label">❗ Sortir Karung Pasokan</span>
         </div>
         <div class="hotspot" style="top: 25%; left: 60%; width: 22%; height: 24%;" onclick="viewDocB()">
           <span class="hotspot-label">❗ Konsep Rentang</span>
         </div>
-        <div class="hotspot quiz-hotspot" style="top: 40%; left: 32%; width: 28%; height: 42%;" onclick="openChapter1Quiz()">
-          <span class="hotspot-label">★ Evaluasi Bab 1</span>
+        <div class="hotspot quiz-hotspot ${quizLockedClass}" style="top: 40%; left: 32%; width: 28%; height: 42%;" onclick="openChapter1Quiz()">
+          <span class="hotspot-label">${quizLabel}</span>
         </div>
       `;
     }
 
-function viewDocA() {
-  playSound('buku');
-  addLog("Membaca rincian pasokan pangan.");
+    function viewDocA() {
+      playSound('buku');
+      addLog("Membuka meja sortir pasokan pangan.");
       showModal(
-        "Catatan Logistik: Pasokan Wilayah",
+        "Pemeriksaan Lumbung: Pisahkan Karung yang Janggal",
         `
-          <p>Tercatat data pasokan pangan gandum untuk 4 wilayah luar kerajaan:</p>
-          <div style="text-align:center; font-size:1.3rem; font-weight:bold; color:var(--accent-cyan); margin:12px 0;">
-            44, 44, 48, 52 ton
+          <p style="margin-bottom:8px;">Pindahkan karung dari sumber ke dalam kotak yang sesuai:</p>
+          
+          <div style="font-size:0.8rem; color:#94a3b8; margin-top:6px;">Karung Pasokan Terdata:</div>
+          <div id="source-zone" class="drop-box" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'source')" style="margin-bottom:12px;">
+            <div class="drag-bag" id="bag-44a" draggable="true" ondragstart="handleDragStart(event)" data-val="44">🌾 Wilayah A (44 Ton)</div>
+            <div class="drag-bag" id="bag-44b" draggable="true" ondragstart="handleDragStart(event)" data-val="44">🌾 Wilayah B (44 Ton)</div>
+            <div class="drag-bag" id="bag-48" draggable="true" ondragstart="handleDragStart(event)" data-val="48">🌾 Wilayah C (48 Ton)</div>
+            <div class="drag-bag" id="bag-52" draggable="true" ondragstart="handleDragStart(event)" data-val="52">🌾 Wilayah D (52 Ton)</div>
+            <div class="drag-bag" id="bag-212" draggable="true" ondragstart="handleDragStart(event)" data-val="212">🌾 Wilayah E (212 Ton)</div>
           </div>
-          <div class="book-card">
-            <strong>Cara Menentukan Rata-Rata (Mean):</strong><br><br>
-            1. Jumlahkan seluruh pasokan pangan: 44 + 44 + 48 + 52 = <strong>188 ton.</strong><br>
-            2. Bagikan dengan banyaknya wilayah (4 wilayah):<br>
-            Rata-rata = 188 / 4 = <strong>47 ton per wilayah.</strong>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div>
+              <div style="font-size:0.8rem; color:var(--accent-cyan); font-weight:bold;">📦 Kelompok Pasokan Wajar</div>
+              <div id="normal-zone" class="drop-box" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'normal')"></div>
+            </div>
+            <div>
+              <div style="font-size:0.8rem; color:var(--accent-red); font-weight:bold;">⚠️ Kelompok Angka Ekstrem/Janggal</div>
+              <div id="outlier-zone" class="drop-box" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'outlier')"></div>
+            </div>
           </div>
-        `
+
+          <div id="c1-sort-feedback" class="book-card" style="border-left-color:var(--accent-gold); margin-top:12px;">
+            Letakkan karung bernilai wajar di kiri, dan karung yang sangat mencolok/terasing di kanan.
+          </div>
+        `,
+        "Tutup Pemeriksaan",
+        () => closeModal()
       );
     }
 
-function viewDocB() {
-  playSound('buku');
-  addLog("Mempelajari konsep rentang.");
+    function allowDrop(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('drag-over');
+    }
+
+    function handleDragStart(e) {
+      e.dataTransfer.setData("text/plain", e.target.id);
+    }
+
+    function handleDrop(e, targetZone) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-over');
+      const bagId = e.dataTransfer.getData("text/plain");
+      const bagEl = document.getElementById(bagId);
+      if (!bagEl) return;
+
+      const val = parseInt(bagEl.getAttribute('data-val'));
+
+      if (targetZone === 'normal' && val === 212) {
+        playSound('wrong');
+        updateSiri(-5);
+        document.getElementById('c1-sort-feedback').innerHTML = `<span style="color:var(--accent-red);">Keliru! Nilai 212 Ton terlalu jauh terasing dibanding lainnya. Karung ini janggal! (-5% Siri')</span>`;
+        return;
+      }
+      if (targetZone === 'outlier' && val !== 212) {
+        playSound('wrong');
+        updateSiri(-5);
+        document.getElementById('c1-sort-feedback').innerHTML = `<span style="color:var(--accent-red);">Keliru! ${val} Ton berada di kelompok wajar (rentang 44-52 Ton). (-5% Siri')</span>`;
+        return;
+      }
+
+      e.currentTarget.appendChild(bagEl);
+      playSound('correct');
+      checkC1SortComplete();
+    }
+
+    function checkC1SortComplete() {
+      const normalZone = document.getElementById('normal-zone');
+      const outlierZone = document.getElementById('outlier-zone');
+
+      if (normalZone.children.length === 4 && outlierZone.children.length === 1) {
+        gameState.c1.ready = true;
+        renderChapter1Hotspots();
+        document.getElementById('c1-sort-feedback').style.borderLeftColor = "var(--accent-green)";
+        document.getElementById('c1-sort-feedback').innerHTML = `
+          <strong style="color:var(--accent-green);">✨ KLASIFIKASI SEMPURNA!</strong><br>
+          • <strong>4 Wilayah Wajar:</strong> 44, 44, 48, 52 Ton (Rata-rata: <strong>47 Ton</strong>).<br>
+          • <strong>Angka Ekstrem (212 Ton):</strong> Nilai janggal ini menarik rata-rata total melesat naik menjadi <strong>80 Ton</strong>.<br>
+          <em>Evaluasi Bab 1 di meja arsip [ ★ ] kini telah TERBUKA!</em>
+        `;
+        addLog("Klasifikasi tuntas: Karung janggal 212 berhasil diisolasi. Evaluasi terbuka.");
+      }
+    }
+
+    function viewDocB() {
+      playSound('buku');
+      addLog("Mempelajari konsep rentang.");
       showModal(
         "Konsep Ukuran Sebaran: Rentang (Range)",
         `
           <div class="book-card">
             <strong>Tujuan Menghitung Rentang:</strong><br>
             Untuk mengetahui seberapa jauh data tersebar. Selisih yang sangat kecil membuktikan pembagian pangan di 4 wilayah luar stabil dan merata.<br><br>
-            
             <strong>Bagaimana Menghitung Rentang?</strong><br>
-            Rentang diperoleh dengan mencari selisih antara nilai tertinggi dan terendah:<br>
             Rentang = Nilai Tertinggi - Nilai Terendah<br><br>
-            
             Pada pasokan 4 wilayah luar: 52 ton - 44 ton = <strong>8 ton.</strong>
           </div>
         `
@@ -716,6 +741,17 @@ function viewDocB() {
     }
 
     function openChapter1Quiz() {
+      if (!gameState.c1.ready) {
+        playSound('wrong');
+        showModal(
+          "Evaluasi Terkunci",
+          `<div class="book-card" style="border-left-color:var(--accent-red);">
+            Selesaikan pemeriksaan dan sortir karung pasokan pada berkas <strong>[ ! Sortir Karung Pasokan ]</strong> terlebih dahulu!
+          </div>`
+        );
+        return;
+      }
+
       playSound('buku');
       if (gameState.c1.stage === 1) {
         showModal(
@@ -723,7 +759,7 @@ function viewDocB() {
           `
             <p>Gabungkan data 4 wilayah tadi dengan lumbung Ibukota. Datanya menjadi:</p>
             <div style="text-align:center; font-size:1.15rem; font-weight:bold; color:var(--accent-gold); margin:12px 0;">
-              44, 44, 48, 52, <span style="color:var(--accent-red);">212 ton</span>
+              44, 44, 48, 52, 212 ton
             </div>
             <p style="margin:10px 0; color:#cbd5e1;">Angka 212 ton sangat berbeda dan jauh dari kawanannya. Angka yang terasing ini disebut...</p>
             <button class="quiz-option" onclick="submitC1Quiz(1, 'mean')">A. Rata-Rata (Mean)</button>
@@ -741,8 +777,8 @@ function viewDocB() {
             <p style="margin:10px 0; color:#cbd5e1;">Apakah angka rata-rata 80 ton ini jujur menggambarkan pasokan riil mayoritas wilayah?</p>
             <button class="quiz-option" onclick="submitC1Quiz(2, 'akurat')">A. Ya, karena dihitung dari total semua wilayah.</button>
             <button class="quiz-option" onclick="submitC1Quiz(2, 'standar')">B. Ya, angka 80 adalah standar kemakmuran resmi.</button>
-            <button class="quiz-option" onclick="submitC1Quiz(2, 'sama')">C. Tidak, rata-rata batal jika ada angka kembar.</button>
-            <button class="quiz-option" onclick="submitC1Quiz(2, 'bias')">D. Tidak, karena rata-rata itu ditarik 1 pencilan.</button>
+            <button class="quiz-option" onclick="submitC1Quiz(2, 'bias')">C. Tidak, karena rata-rata itu ditarik 1 pencilan.</button>
+            <button class="quiz-option" onclick="submitC1Quiz(2, 'sama')">D. Tidak, rata-rata batal jika ada angka kembar.</button>
           `,
           "Tutup"
         );
@@ -751,9 +787,9 @@ function viewDocB() {
           "Evaluasi Tahap 3: Kesimpulan",
           `
             <p>Dari kasus ini, apa bahaya utama menghitung Rata-rata (Mean) jika ada angka ekstrem?</p>
-            <button class="quiz-option" onclick="submitC1Quiz(3, 'pecahan')">A. Rata-rata selalu menghasilkan pecahan rumit.</button>
+            <button class="quiz-option" onclick="submitC1Quiz(3, 'benar')">A. Dapat ditarik naik tajam oleh 1 angka ekstrem.</button>
             <button class="quiz-option" onclick="submitC1Quiz(3, 'buang')">B. Mewajibkan analis membuang angka yang kecil.</button>
-            <button class="quiz-option" onclick="submitC1Quiz(3, 'benar')">C. Dapat ditarik naik tajam oleh 1 angka ekstrem.</button>
+            <button class="quiz-option" onclick="submitC1Quiz(3, 'pecahan')">C. Rata-rata selalu menghasilkan pecahan rumit.</button>
             <button class="quiz-option" onclick="submitC1Quiz(3, 'genap')">D. Hanya boleh dihitung jika jumlah datanya genap.</button>
           `,
           "Tutup"
@@ -762,57 +798,64 @@ function viewDocB() {
     }
 
     function submitC1Quiz(stage, choice) {
-  if (stage === 1) {
-    if (choice === 'outlier') {
-      playSound('correct'); // <--- Audio Jawaban Benar
-      gameState.c1.stage = 2;
-      addLog("Tahap 1 Berhasil: Pencilan (Outlier) teridentifikasi.");
-      showModal("Tepat Sekali!", `<div class="book-card" style="border-left-color: var(--accent-green);">Angka 212 adalah <strong>Pencilan (Outlier)</strong>, yaitu nilai yang posisinya terpisah sangat jauh dari kelompoknya.</div>`, "Lanjut ke Tahap 2", () => openChapter1Quiz());
-    } else {
-      playSound('wrong'); // <--- Audio Jawaban Salah
-if (updateSiri(-10)) return;
-      let reason = "";
-      if (choice === 'mean') reason = "Rata-rata (Mean) adalah nilai hasil bagi keseluruhan kelompok, bukan sebutan untuk suatu angka terasing.";
-      if (choice === 'modus') reason = "Modus adalah angka yang paling sering muncul (dalam hal ini 44).";
-      if (choice === 'range') reason = "Rentang adalah jarak ujung ke ujung, bukan sebutan untuk angkanya itu sendiri.";
-      addLog("Tahap 1 keliru.");
-      showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter1Quiz());
+      if (stage === 1) {
+        if (choice === 'outlier') {
+          playSound('correct');
+          gameState.c1.stage = 2;
+          addLog("Tahap 1 Berhasil: Pencilan (Outlier) teridentifikasi.");
+          showModal("Tepat Sekali!", `<div class="book-card" style="border-left-color: var(--accent-green);">Angka 212 adalah <strong>Pencilan (Outlier)</strong>, yaitu nilai yang posisinya terpisah sangat jauh dari kelompoknya.</div>`, "Lanjut ke Tahap 2", () => openChapter1Quiz());
+        } else {
+          playSound('wrong');
+          if (updateSiri(-10)) return;
+          let reason = "";
+          if (choice === 'mean') reason = "Rata-rata (Mean) adalah nilai hasil bagi keseluruhan kelompok, bukan sebutan untuk suatu angka terasing.";
+          if (choice === 'modus') reason = "Modus adalah angka yang paling sering muncul (dalam hal ini 44).";
+          if (choice === 'range') reason = "Rentang adalah jarak ujung ke ujung, bukan sebutan untuk angkanya itu sendiri.";
+          addLog("Tahap 1 keliru.");
+          showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter1Quiz());
+        }
+      } else if (stage === 2) {
+        if (choice === 'bias') {
+          playSound('correct');
+          gameState.c1.stage = 3;
+          addLog("Tahap 2 Berhasil: Bahaya rata-rata dipahami.");
+          showModal("Tepat!", `<div class="book-card" style="border-left-color: var(--accent-green);">Secara matematika memang benar 80, tapi angka itu mengelabui realitas karena ditarik naik oleh 1 angka ekstrem saja.</div>`, "Lanjut ke Kesimpulan", () => openChapter1Quiz());
+        } else {
+          playSound('wrong');
+          if (updateSiri(-10)) return;
+          let reason = "";
+          if (choice === 'akurat') reason = "Meskipun dihitung dari semua angka, hasilnya gagal mewakili kondisi mayoritas karena ditarik 1 angka raksasa.";
+          if (choice === 'standar') reason = "Angka 80 muncul murni akibat perhitungan matematika yang terseret angka ekstrem 212, bukan standar resmi.";
+          if (choice === 'sama') reason = "Angka kembar wajar dalam statistika dan tidak membatalkan rata-rata.";
+          addLog("Tahap 2 keliru.");
+          showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter1Quiz());
+        }
+      } else {
+        if (choice === 'benar') {
+          playSound('correct');
+          gameState.c1.solved = true;
+          gameState.savedTimeSec = (gameState.savedTimeSec || 0) + gameState.timerSec;
+          addLog("Bab 1 Selesai: Kesimpulan tuntas.");
+          showModal(
+            "Evaluasi Bab 1 Selesai!",
+            `<div class="book-card" style="border-left-color: var(--accent-green);">
+              Penyelidikan sempurna! Kamu telah memahami bagaimana Rata-rata (Mean) bisa menyembunyikan ketimpangan jika di dalamnya ada Pencilan (Outlier).
+            </div>`,
+            "Buka Bab 2 ➔",
+            () => { closeModal(); loadChapter2(); }
+          );
+        } else {
+          playSound('wrong');
+          if (updateSiri(-10)) return;
+          let reason = "";
+          if (choice === 'pecahan') reason = "Rata-rata tidak selalu menghasilkan pecahan.";
+          if (choice === 'buang') reason = "Membuang data wilayah kecil sama dengan memanipulasi informasi.";
+          if (choice === 'genap') reason = "Genap atau ganjil tidak melarang kita menghitung Rata-rata.";
+          addLog("Tahap 3 keliru.");
+          showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter1Quiz());
+        }
+      }
     }
-  } else if (stage === 2) {
-    if (choice === 'bias') {
-      playSound('correct'); // <--- Audio Jawaban Benar
-      gameState.c1.stage = 3;
-      addLog("Tahap 2 Berhasil: Bahaya rata-rata dipahami.");
-      showModal("Tepat!", `<div class="book-card" style="border-left-color: var(--accent-green);">Secara matematika memang benar 80, tapi angka itu mengelabui realitas karena ditarik naik oleh 1 angka ekstrem saja.</div>`, "Lanjut ke Kesimpulan", () => openChapter1Quiz());
-    } else {
-      playSound('wrong'); // <--- Audio Jawaban Salah
-if (updateSiri(-10)) return;
-      let reason = "";
-      if (choice === 'akurat') reason = "Meskipun dihitung dari semua angka, hasilnya gagal mewakili kondisi mayoritas karena ditarik 1 angka raksasa.";
-      if (choice === 'standar') reason = "Angka 80 muncul murni akibat perhitungan matematika yang terseret angka ekstrem 212, bukan standar resmi.";
-      if (choice === 'sama') reason = "Angka kembar wajar dalam statistika dan tidak membatalkan rata-rata.";
-      addLog("Tahap 2 keliru.");
-      showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter1Quiz());
-    }
-  } else {
-    if (choice === 'benar') {
-      playSound('correct'); // <--- Audio Jawaban Benar
-      gameState.c1.solved = true;
-      gameState.savedTimeSec = (gameState.savedTimeSec || 0) + gameState.timerSec; // <--- DI SINI
-      addLog("Bab 1 Selesai: Kesimpulan tuntas.");
-      showModal("Evaluasi Bab 1 Selesai!", `<div class="book-card" style="border-left-color: var(--accent-green);">Penyelidikan sempurna! Kamu telah memahami bagaimana Rata-rata (Mean) bisa menyembunyikan ketimpangan jika di dalamnya ada Pencilan (Outlier).</div>`, "Buka Bab 2 ➔", () => { closeModal(); loadChapter2(); });
-    } else {
-      playSound('wrong'); // <--- Audio Jawaban Salah
-if (updateSiri(-10)) return;
-      let reason = "";
-      if (choice === 'pecahan') reason = "Rata-rata tidak selalu menghasilkan pecahan.";
-      if (choice === 'buang') reason = "Membuang data wilayah kecil sama dengan memanipulasi informasi.";
-      if (choice === 'genap') reason = "Genap atau ganjil tidak melarang kita menghitung Rata-rata.";
-      addLog("Tahap 3 keliru.");
-      showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter1Quiz());
-    }
-  }
-}
 
     /* =========================================================
        3. BAB 2: SKALA GRAFIK & MEDIAN
@@ -820,86 +863,113 @@ if (updateSiri(-10)) return;
     function loadChapter2() {
       gameState.chapter = "c2";
       gameState.c2.stage = 1;
+      gameState.c2.ready = false;
       chapterDisplay.innerText = "Bab 2";
       sceneCanvas.style.backgroundImage = "url('22.png')";
 
       addLog("Bab 2 dimulai: Aula Presentasi Grafik.");
-startTimer(8);
+      startTimer(8);
       clearTimeout(gameState.hintTimeout);
       triggerSiriHint("Bentuk grafik boleh apa saja, tapi cara mereka memotong skala sumbu itulah sumber manipulasinya.");
 
       leftPanel.innerHTML = `
         <div class="status-panel">
-          <strong>Status Penyelidikan:</strong> Periksa papan grafik di kiri dan pilar pemusatan di kanan <strong style="color:var(--accent-cyan);">[ ! ]</strong>, lalu selesaikan evaluasi di <strong style="color:var(--accent-gold);">[ ★ ]</strong>.
+          <strong>Status Penyelidikan:</strong> Bongkar papan grafik interaktif di kiri <strong style="color:var(--accent-cyan);">[ ! ]</strong> untuk membuka sidang evaluasi <strong style="color:var(--accent-gold);">[ ★ ]</strong>.
         </div>
       `;
 
+      renderChapter2Hotspots();
+    }
+
+    function renderChapter2Hotspots() {
+      const quizLockedClass = gameState.c2.ready ? "" : "locked";
+      const quizLabel = gameState.c2.ready ? "★ Evaluasi Bab 2" : "🔒 Evaluasi (Terkunci)";
+
       sceneCanvas.innerHTML = `
         <div class="hotspot" style="top: 34%; left: 2%; width: 18%; height: 42%;" onclick="viewGraphBiasInfo()">
-          <span class="hotspot-label">❗ Presentasi Grafik</span>
+          <span class="hotspot-label">❗ Rekonstruksi Sumbu Grafik</span>
         </div>
         <div class="hotspot" style="top: 35%; left: 45%; width: 20%; height: 50%;" onclick="viewRuneInfo()">
           <span class="hotspot-label">❗ Titik Tengah</span>
         </div>
-        <div class="hotspot quiz-hotspot" style="top: 15%; left: 30%; width: 38%; height: 32%;" onclick="openChapter2Quiz()">
-          <span class="hotspot-label">★ Evaluasi Bab 2</span>
+        <div class="hotspot quiz-hotspot ${quizLockedClass}" style="top: 15%; left: 30%; width: 38%; height: 32%;" onclick="openChapter2Quiz()">
+          <span class="hotspot-label">${quizLabel}</span>
         </div>
       `;
     }
 
-function viewGraphBiasInfo() {
-  playSound('grafik');
-      addLog("Melihat simulasi grafik presentasi.");
+    function viewGraphBiasInfo() {
+      playSound('grafik');
+      addLog("Membuka alat rekonstruksi sumbu grafik.");
       showModal(
-        "Papan Presentasi: Manipulasi Sumbu",
+        "Alat Rekonstruksi Grafik: Geser Skala Maksimum",
         `
-          <p style="margin-bottom:12px;">Simulasi grafik mendatar (asli vs pemotongan sumbu):</p>
+          <p>Geser tuas skala sumbu dari batas manipulasi (50 Ton) hingga skala penuh (250 Ton) untuk melihat proporsi asli kelima wilayah:</p>
           
-          <!-- Container Grafik Horizontal -->
-          <div style="position: relative; width: 100%; box-sizing: border-box; padding: 34px 10px 34px 45px; border-left: 2px solid #64748b; margin: 15px 0;">
-            
-            <!-- Area Bar Canvas: Lebar tersisa untuk grafik = calc(100% - 33px) -->
-            <!-- Garis Batas Potong 50 (50 / 212 = 23.58%) -->
-            <div style="position: absolute; left: calc(45px + 33px + (100% - 45px - 10px - 33px) * 0.2358); top: 12px; bottom: 12px; border-left: 2px dashed var(--accent-green); z-index: 5;">
-              <span style="position: absolute; bottom: -24px; left: -26px; background: var(--accent-green); color: #0f172a; font-size: 0.7rem; font-weight: bold; padding: 2px 5px; border-radius: 4px; white-space: nowrap;">50 (Batas)</span>
-            </div>
+          <div style="margin: 16px 0; text-align: center;">
+            <input type="range" id="c2-scale-slider" min="50" max="250" value="50" style="width: 85%; cursor: pointer;" oninput="updateAllBars(this.value)">
+            <div style="font-weight: bold; margin-top: 6px; color: var(--accent-gold);">Batas Skala Grafik: <span id="c2-scale-val">50</span> Ton</div>
+          </div>
 
-            <!-- Garis Rata-rata 80 (80 / 212 = 37.74%) -->
-            <div style="position: absolute; left: calc(45px + 33px + (100% - 45px - 10px - 33px) * 0.3774); top: 12px; bottom: 12px; border-left: 2px dashed #f8fafc; z-index: 5;">
-              <span style="position: absolute; top: -24px; left: -32px; background: #f8fafc; color: #0f172a; font-size: 0.7rem; font-weight: bold; padding: 2px 5px; border-radius: 4px; white-space: nowrap;">80 (Rata-rata)</span>
+          <div style="border-left: 2px solid #64748b; padding-left: 10px; display: flex; flex-direction: column; gap: 8px; margin: 15px 0;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:75px; font-size:0.75rem; color:#cbd5e1;">Wilayah A (44)</span>
+              <div id="bar-1" style="height:14px; width:88%; background:var(--accent-cyan); border-radius:3px; transition:width 0.1s;"></div>
             </div>
-
-            <!-- Deretan Batang Horizontal -->
-            <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-              <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
-                <span style="width: 25px; font-size: 0.8rem; color: #cbd5e1; text-align: right; flex-shrink: 0;">44</span>
-                <div style="height: 18px; width: calc((100% - 33px) * (44 / 212)); background: var(--accent-cyan); border-radius: 0 4px 4px 0;"></div>
-              </div>
-              <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
-                <span style="width: 25px; font-size: 0.8rem; color: #cbd5e1; text-align: right; flex-shrink: 0;">44</span>
-                <div style="height: 18px; width: calc((100% - 33px) * (44 / 212)); background: var(--accent-cyan); border-radius: 0 4px 4px 0;"></div>
-              </div>
-              <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
-                <span style="width: 25px; font-size: 0.8rem; color: #cbd5e1; text-align: right; flex-shrink: 0;">48</span>
-                <div style="height: 18px; width: calc((100% - 33px) * (48 / 212)); background: var(--accent-cyan); border-radius: 0 4px 4px 0;"></div>
-              </div>
-              <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
-                <span style="width: 25px; font-size: 0.8rem; color: #cbd5e1; text-align: right; flex-shrink: 0;">52</span>
-                <div style="height: 18px; width: calc((100% - 33px) * (52 / 212)); background: var(--accent-cyan); border-radius: 0 4px 4px 0;"></div>
-              </div>
-              <!-- Batang 212 mencapai lebar penuh (100% - 33px) -->
-              <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
-                <span style="width: 25px; font-size: 0.8rem; color: var(--accent-red); font-weight: bold; text-align: right; flex-shrink: 0;">212</span>
-                <div style="height: 18px; width: calc(100% - 33px); background: var(--accent-red); border-radius: 0 4px 4px 0;"></div>
-              </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:75px; font-size:0.75rem; color:#cbd5e1;">Wilayah B (44)</span>
+              <div id="bar-2" style="height:14px; width:88%; background:var(--accent-cyan); border-radius:3px; transition:width 0.1s;"></div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:75px; font-size:0.75rem; color:#cbd5e1;">Wilayah C (48)</span>
+              <div id="bar-3" style="height:14px; width:96%; background:var(--accent-cyan); border-radius:3px; transition:width 0.1s;"></div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:75px; font-size:0.75rem; color:#cbd5e1;">Wilayah D (52)</span>
+              <div id="bar-4" style="height:14px; width:100%; background:var(--accent-cyan); border-radius:3px; transition:width 0.1s;"></div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:75px; font-size:0.75rem; color:#cbd5e1;">Wilayah E (212)</span>
+              <div id="bar-5" style="height:14px; width:100%; background:var(--accent-cyan); border-radius:3px; transition:width 0.1s;"></div>
             </div>
           </div>
 
-          <div class="book-card">
-            Perhatikan batang merah <strong>212</strong> yang aslinya melesat jauh melampaui garis rata-rata 80. Pejabat sengaja memotong grafik di batas 50 (Garis Hijau) agar batang panjang ini dipangkas dan terlihat rata dengan wilayah lain.
+          <div id="c2-reveal-box" class="book-card" style="border-left-color:var(--accent-gold);">
+            Pada skala 50, batang 212 terpotong rata dan terlihat sama tinggi dengan wilayah lainnya. Tarik slider ke kanan untuk membuka wujud aslinya!
           </div>
-        `
+        `,
+        "Tutup Rekonstruksi",
+        () => closeModal()
       );
+    }
+
+    function updateAllBars(maxVal) {
+      const max = parseInt(maxVal);
+      document.getElementById("c2-scale-val").innerText = max;
+
+      const data = [44, 44, 48, 52, 212];
+      data.forEach((val, idx) => {
+        const barEl = document.getElementById("bar-" + (idx + 1));
+        let pct = Math.min(100, Math.round((val / max) * 100));
+        barEl.style.width = pct + "%";
+      });
+
+      const revealBox = document.getElementById("c2-reveal-box");
+      if (max >= 212) {
+        gameState.c2.ready = true;
+        renderChapter2Hotspots();
+        revealBox.style.borderLeftColor = "var(--accent-red)";
+        revealBox.innerHTML = `
+          <strong style="color:var(--accent-red);">🚨 MANIPULASI TERSEMBUNYI DIBONGKAR!</strong><br>
+          Pada batas skala 212 Ton atau lebih, terlihat jelas bahwa pasokan Wilayah E <strong>melonjak lebih dari 4 kali lipat</strong> dibanding wilayah lainnya! Pemotongan sumbu di angka 50 terbukti merupakan trik licik.<br>
+          <em>Evaluasi Bab 2 [ ★ ] kini telah TERBUKA!</em>
+        `;
+      } else {
+        revealBox.style.borderLeftColor = "var(--accent-gold)";
+        revealBox.innerHTML = `
+          Batas skala saat ini (${max} Ton) masih memotong data riil 212 Ton. Tarik hingga mencapai 212 Ton atau lebih untuk mengungkap fakta utuh!
+        `;
+      }
     }
 
     function viewRuneInfo() {
@@ -909,26 +979,35 @@ function viewGraphBiasInfo() {
         "Pilar Pustaka: Memilih Titik Tengah yang Jujur",
         `
           <div class="book-card">
-            • <strong>Mean (Rata-rata):</strong> Sangat peka. Satu angka raksasa akan menarik rata-rata naik tajam.<br><br>
-            • <strong>Median (Nilai Tengah):</strong> Urutkan data dari terkecil hingga terbesar:<br>
-            44, 44, <strong>[48]</strong>, 52, 212<br><br>
-            Nilai yang persis di tengah barisan adalah <strong>48 ton</strong>.<br>
-            <em>Median sangat tangguh (robust) dan tidak goyah meski angka Ibukota melonjak sangat tinggi.</em>
+            • <strong>Mean (Rata-rata):</strong> Sangat peka dan terseret oleh 1 angka raksasa.<br><br>
+            • <strong>Median (Nilai Tengah):</strong> Urutkan data: 44, 44, <strong>[48]</strong>, 52, 212.<br>
+            Nilai tengahnya adalah <strong>48 ton</strong> (Netral dan tahan terhadap manipulasi).
           </div>
         `
       );
     }
 
     function openChapter2Quiz() {
+      if (!gameState.c2.ready) {
+        playSound('wrong');
+        showModal(
+          "Evaluasi Terkunci",
+          `<div class="book-card" style="border-left-color:var(--accent-red);">
+            Bongkar manipulasi grafik pada <strong>[ ! Rekonstruksi Sumbu Grafik ]</strong> dengan menarik slider hingga 212 Ton atau lebih terlebih dahulu!
+          </div>`
+        );
+        return;
+      }
+
       playSound('lampu');
       if (gameState.c2.stage === 1) {
         showModal(
           "Evaluasi Tahap 1: Efek Grafik",
           `
             <p>Apa efek utama dari memotong skala sumbu vertikal grafik di angka 50?</p>
-            <button class="quiz-option" onclick="submitC2Quiz(1, 'tambah')">A. Menambah beras secara nyata di lumbung desa.</button>
-            <button class="quiz-option" onclick="submitC2Quiz(1, 'ubah')">B. Mengubah bentuk asli diagram menjadi lingkaran.</button>
-            <button class="quiz-option" onclick="submitC2Quiz(1, 'benar')">C. Menyamarkan penimbunan agar terlihat setara.</button>
+            <button class="quiz-option" onclick="submitC2Quiz(1, 'benar')">A. Menyamarkan penimbunan agar terlihat setara.</button>
+            <button class="quiz-option" onclick="submitC2Quiz(1, 'tambah')">B. Menambah beras secara nyata di lumbung desa.</button>
+            <button class="quiz-option" onclick="submitC2Quiz(1, 'ubah')">C. Mengubah bentuk asli diagram menjadi lingkaran.</button>
             <button class="quiz-option" onclick="submitC2Quiz(1, 'jelas')">D. Menampilkan angka tertinggi secara lebih transparan.</button>
           `,
           "Tutup"
@@ -940,8 +1019,8 @@ function viewGraphBiasInfo() {
             <p>Sebagai analis independen, ukuran mana yang lebih jujur kamu laporkan jika ada data pencilan?</p>
             <button class="quiz-option" onclick="submitC2Quiz(2, 'mean')">A. Mean (80 ton), karena melibatkan total seluruh data.</button>
             <button class="quiz-option" onclick="submitC2Quiz(2, 'modus')">B. Modus (44 ton), karena akan membuat Raja bersimpati.</button>
-            <button class="quiz-option" onclick="submitC2Quiz(2, 'median')">C. Median (48 ton), karena tangguh melawan outlier.</button>
-            <button class="quiz-option" onclick="submitC2Quiz(2, 'max')">D. Maksimal (212 ton), karena ini batas tertinggi kerajaan.</button>
+            <button class="quiz-option" onclick="submitC2Quiz(2, 'max')">C. Maksimal (212 ton), karena ini batas tertinggi kerajaan.</button>
+            <button class="quiz-option" onclick="submitC2Quiz(2, 'median')">D. Median (48 ton), karena tangguh melawan outlier.</button>
           `,
           "Tutup"
         );
@@ -949,10 +1028,10 @@ function viewGraphBiasInfo() {
         showModal(
           "Evaluasi Tahap 3: Peran Nilai Median",
           `
-            <p>Kenapa kita mengutamakan Median dan seolah 'mengabaikan' angka pencilan 212 ton? Bukankah itu berarti membuang data?</p>
+            <p>Kenapa kita mengutamakan Median dan seolah 'mengabaikan' angka pencilan 212 ton?</p>
             <button class="quiz-option" onclick="submitC2Quiz(3, 'salah1')">A. Karena 212 ton murni salah tulis dan memang wajib dibuang.</button>
-            <button class="quiz-option" onclick="submitC2Quiz(3, 'salah2')">B. Karena angka besar selalu wajib dibagi setengahnya.</button>
-            <button class="quiz-option" onclick="submitC2Quiz(3, 'benar')">C. Memakai titik tengah agar keseimbangan tidak ditarik oleh anomali.</button>
+            <button class="quiz-option" onclick="submitC2Quiz(3, 'benar')">B. Memakai titik tengah agar keseimbangan tidak ditarik oleh anomali.</button>
+            <button class="quiz-option" onclick="submitC2Quiz(3, 'salah2')">C. Karena angka besar selalu wajib dibagi setengahnya.</button>
             <button class="quiz-option" onclick="submitC2Quiz(3, 'salah3')">D. Karena tugas analis data hanyalah mencari angka yang kembar.</button>
           `,
           "Tutup"
@@ -961,57 +1040,64 @@ function viewGraphBiasInfo() {
     }
 
     function submitC2Quiz(stage, choice) {
-  if (stage === 1) {
-    if (choice === 'benar') {
-      playSound('correct'); // <--- Audio Jawaban Benar
-      gameState.c2.stage = 2;
-      addLog("Tahap 1 Berhasil: Visual terpecahkan.");
-      showModal("Analisis Tepat!", `<div class="book-card" style="border-left-color: var(--accent-green);">Memotong batas sumbu grafik adalah manipulasi agar batang tertinggi tampak pendek. Bentuk grafik apa pun sah, tapi memotong skalanya adalah kebohongan.</div>`, "Lanjut ke Tahap 2", () => openChapter2Quiz());
-    } else {
-      playSound('wrong'); // <--- Audio Jawaban Salah
-if (updateSiri(-10)) return;
-      let reason = "";
-      if (choice === 'tambah') reason = "Grafik tidak bisa mengubah jumlah barang di dunia nyata.";
-      if (choice === 'ubah') reason = "Bentuk grafik tetap batang, manipulasi terjadi pada pemotongan skalanya.";
-      if (choice === 'jelas') reason = "Pemotongan ini justru menyembunyikan ketinggian asli 212 agar tidak mencolok.";
-      addLog("Tahap 1 keliru.");
-      showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter2Quiz());
+      if (stage === 1) {
+        if (choice === 'benar') {
+          playSound('correct');
+          gameState.c2.stage = 2;
+          addLog("Tahap 1 Berhasil: Visual terpecahkan.");
+          showModal("Analisis Tepat!", `<div class="book-card" style="border-left-color: var(--accent-green);">Memotong batas sumbu grafik adalah manipulasi agar batang tertinggi tampak pendek.</div>`, "Lanjut ke Tahap 2", () => openChapter2Quiz());
+        } else {
+          playSound('wrong');
+          if (updateSiri(-10)) return;
+          let reason = "";
+          if (choice === 'tambah') reason = "Grafik tidak bisa mengubah jumlah barang di dunia nyata.";
+          if (choice === 'ubah') reason = "Bentuk grafik tetap batang, manipulasi terjadi pada pemotongan skalanya.";
+          if (choice === 'jelas') reason = "Pemotongan ini justru menyembunyikan ketinggian asli 212 agar tidak mencolok.";
+          addLog("Tahap 1 keliru.");
+          showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter2Quiz());
+        }
+      } else if (stage === 2) {
+        if (choice === 'median') {
+          playSound('correct');
+          gameState.c2.stage = 3;
+          addLog("Tahap 2 Berhasil: Median dipilih.");
+          showModal("Keputusan Tepat!", `<div class="book-card" style="border-left-color: var(--accent-green);">Bagus! Saat ada angka pencilan raksasa, Median (Nilai Tengah) adalah satu-satunya ukuran yang netral mewakili mayoritas.</div>`, "Lanjut ke Tahap 3", () => openChapter2Quiz());
+        } else {
+          playSound('wrong');
+          if (updateSiri(-10)) return;
+          let reason = "";
+          if (choice === 'mean') reason = "Menggunakan Mean di sini hanya menguntungkan si penimbun karena nilainya ditarik naik oleh angka ekstrem.";
+          if (choice === 'modus') reason = "Modus tidak dipilih berdasarkan simpati, melainkan karena ia tidak mewakili titik pusat data keseluruhan.";
+          if (choice === 'max') reason = "Maksimum hanya melihat satu titik puncak ekstrem.";
+          addLog("Tahap 2 keliru.");
+          showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter2Quiz());
+        }
+      } else {
+        if (choice === 'benar') {
+          playSound('correct');
+          gameState.c2.solved = true;
+          gameState.savedTimeSec = (gameState.savedTimeSec || 0) + gameState.timerSec;
+          addLog("Bab 2 Selesai: Manipulasi sumbu grafik dan peran median tuntas.");
+          showModal(
+            "Evaluasi Bab 2 Selesai!",
+            `<div class="book-card" style="border-left-color: var(--accent-green);">
+              Sangat kritis! Kita tetap mengakui keberadaan data pencilan 212, namun kita tidak membiarkan nilai tersebut menyesatkan simpulan untuk sisa kelompok.
+            </div>`,
+            "Buka Bab 3 ➔",
+            () => { closeModal(); loadChapter3(); }
+          );
+        } else {
+          playSound('wrong');
+          if (updateSiri(-10)) return;
+          let reason = "";
+          if (choice === 'salah1') reason = "Data 212 ton adalah realita lapangan (korupsi), bukan salah tulis, jadi pantang dihapus.";
+          if (choice === 'salah2') reason = "Statistika tidak membenarkan pembagian nilai asli secara sewenang-wenang.";
+          if (choice === 'salah3') reason = "Mencari angka kembar (Modus) tidak membuktikan keseimbangan titik pusat.";
+          addLog("Tahap 3 keliru.");
+          showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter2Quiz());
+        }
+      }
     }
-  } else if (stage === 2) {
-    if (choice === 'median') {
-      playSound('correct'); // <--- Audio Jawaban Benar
-      gameState.c2.stage = 3;
-      addLog("Tahap 2 Berhasil: Median dipilih.");
-      showModal("Keputusan Tepat!", `<div class="book-card" style="border-left-color: var(--accent-green);">Bagus! Saat ada angka pencilan raksasa, Median (Nilai Tengah) adalah satu-satunya ukuran yang netral mewakili mayoritas.</div>`, "Lanjut ke Tahap 3", () => openChapter2Quiz());
-    } else {
-      playSound('wrong'); // <--- Audio Jawaban Salah
-if (updateSiri(-10)) return;
-      let reason = "";
-      if (choice === 'mean') reason = "Menggunakan Mean di sini hanya menguntungkan si penimbun karena nilainya ditarik naik oleh angka ekstrem.";
-      if (choice === 'modus') reason = "Modus tidak dipilih berdasarkan simpati, melainkan karena ia tidak mewakili titik pusat data keseluruhan.";
-      if (choice === 'max') reason = "Maksimum hanya melihat satu titik puncak ekstrem.";
-      addLog("Tahap 2 keliru.");
-      showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter2Quiz());
-    }
-  } else {
-    if (choice === 'benar') {
-      playSound('correct'); // <--- Audio Jawaban Benar
-      gameState.c2.solved = true;
-      gameState.savedTimeSec = (gameState.savedTimeSec || 0) + gameState.timerSec; // <--- Simpan sisa waktu Bab 2
-      addLog("Bab 2 Selesai.");
-      showModal("Evaluasi Bab 2 Selesai!", `<div class="book-card" style="border-left-color: var(--accent-green);">Sangat kritis! Kita tetap mengakui keberadaan data pencilan 212, namun kita tidak membiarkan nilai tersebut menyesatkan simpulan untuk sisa kelompok.</div>`, "Buka Bab 3 ➔", () => { closeModal(); loadChapter3(); });
-    } else {
-      playSound('wrong'); // <--- Audio Jawaban Salah
-if (updateSiri(-10)) return;
-      let reason = "";
-      if (choice === 'salah1') reason = "Data 212 ton adalah realita lapangan (korupsi), bukan salah tulis, jadi pantang dihapus.";
-      if (choice === 'salah2') reason = "Statistika tidak membenarkan pembagian nilai asli secara sewenang-wenang.";
-      if (choice === 'salah3') reason = "Mencari angka kembar (Modus) tidak membuktikan keseimbangan titik pusat.";
-      addLog("Tahap 3 keliru.");
-      showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter2Quiz());
-    }
-  }
-}
 
     /* =========================================================
        4. BAB 3: KORELASI VS KAUSALITAS
@@ -1019,29 +1105,37 @@ if (updateSiri(-10)) return;
     function loadChapter3() {
       gameState.chapter = "c3";
       gameState.c3.stage = 1;
+      gameState.c3.ready = false;
       chapterDisplay.innerText = "Bab 3";
       sceneCanvas.style.backgroundImage = "url('31.png')";
 
       addLog("Bab 3 dimulai: Sidang Pembuktian.");
-startTimer(8);
+      startTimer(8);
       clearTimeout(gameState.hintTimeout);
       triggerSiriHint("Banyak hal terjadi bersamaan (Korelasi). Kausalitas butuh bukti fisik pengikat dan urutan waktu yang pasti.");
 
       leftPanel.innerHTML = `
         <div class="status-panel">
-          <strong>Status Penyelidikan:</strong> Pelajari berkas mutasi fisik dan urutan linimasa <strong style="color:var(--accent-cyan);">[ ! ]</strong>, lalu hadapi evaluasi di Singgasana Raja <strong style="color:var(--accent-gold);">[ ★ ]</strong>.
+          <strong>Status Penyelidikan:</strong> Susun rantai sebab-akibat pada linimasa <strong style="color:var(--accent-cyan);">[ ! ]</strong> untuk membuka sidang vonis Singgasana Raja <strong style="color:var(--accent-gold);">[ ★ ]</strong>.
         </div>
       `;
+
+      renderChapter3Hotspots();
+    }
+
+    function renderChapter3Hotspots() {
+      const quizLockedClass = gameState.c3.ready ? "" : "locked";
+      const quizLabel = gameState.c3.ready ? "★ Singgasana Sidang" : "🔒 Sidang (Terkunci)";
 
       sceneCanvas.innerHTML = `
         <div class="hotspot" style="top: 55%; left: 10%; width: 22%; height: 35%;" onclick="viewWarehouseAudit()">
           <span class="hotspot-label">❗ Bukti Aliran Nyata</span>
         </div>
         <div class="hotspot" style="top: 55%; left: 38%; width: 22%; height: 35%;" onclick="viewTimelineAudit()">
-          <span class="hotspot-label">❗ Linimasa Waktu</span>
+          <span class="hotspot-label">❗ Rekonstruksi Kausalitas</span>
         </div>
-        <div class="hotspot quiz-hotspot" style="top: 15%; left: 68%; width: 26%; height: 70%;" onclick="openChapter3Quiz()">
-          <span class="hotspot-label">★ Singgasana Sidang</span>
+        <div class="hotspot quiz-hotspot ${quizLockedClass}" style="top: 15%; left: 68%; width: 26%; height: 70%;" onclick="openChapter3Quiz()">
+          <span class="hotspot-label">${quizLabel}</span>
         </div>
       `;
     }
@@ -1054,40 +1148,90 @@ startTimer(8);
         `
           <div class="book-card">
             Ditemukan surat perintah penyitaan stempel Adipati. Sebanyak <strong>212 ton pasokan</strong> dipindahkan paksa menggunakan kereta kuda menuju gudangnya.<br><br>
-            <em>Ini adalah bukti "Mekanisme Fisik" yang nyata. Data tidak mungkin bergerak sendiri tanpa campur tangan aktif.</em>
+            <em>Ini adalah bukti "Mekanisme Fisik" yang nyata. Data tidak berpindah sendiri melainkan ada aksi fisik penggerak.</em>
           </div>
         `
       );
     }
 
+    let c3TimelineState = 1;
     function viewTimelineAudit() {
       playSound('buku');
-      addLog("Mempelajari Linimasa Urutan Waktu.");
+      addLog("Menyusun rantai kronologi sebab-akibat.");
+      c3TimelineState = 1;
       showModal(
-        "Linimasa Urutan Waktu",
+        "Papan Rekonstruksi: Susun Rantai Sebab-Akibat",
         `
-          <div class="book-card">
-            • <strong>Hari 3:</strong> Pertemuan rahasia persekongkolan logistik oleh Adipati.<br>
-            • <strong>Hari 5:</strong> Pasokan 212 ton dialihkan paksa ke Ibukota.<br>
-            • <strong>Hari 7:</strong> Laporan dimanipulasi dengan pemotongan grafik.<br>
-            • <strong>Hari 9:</strong> Dampak krisis kelaparan rakyat memuncak.<br><br>
-            <span style="color:var(--accent-gold);">Syarat Mutlak Kausalitas:</span> Penyebab (Hari 5) HARUS terjadi mendahului Akibat (Hari 9).
+          <p>Susun 4 peristiwa di bawah dari <strong>Pemicu Awal</strong> hingga <strong>Dampak Akhir</strong> (Klik secara berurutan):</p>
+          
+          <div style="display:flex; flex-direction:column; gap:8px; margin:14px 0;">
+            <button class="quiz-option" id="ev-report" onclick="selectTimelineStep('REPORT')">📜 Rekayasa Grafik: Laporan statistik dipotong di angka 50</button>
+            <button class="quiz-option" id="ev-plot" onclick="selectTimelineStep('PLOT')">🤝 Persekongkolan: Rapat rahasia monopoli pangan di kediaman Adipati</button>
+            <button class="quiz-option" id="ev-famine" onclick="selectTimelineStep('FAMINE')">🚨 Dampak Nyata: Kelaparan dan kelangkaan gandum melanda desa-desa</button>
+            <button class="quiz-option" id="ev-raid" onclick="selectTimelineStep('RAID')">📦 Eksekusi Lapangan: Pasokan 212 ton diangkut paksa ke Ibukota</button>
           </div>
-        `
+
+          <div id="c3-tl-feedback" class="book-card" style="border-left-color:var(--accent-gold);">
+            Langkah 1: Tentukan peristiwa mana yang menjadi titik awal pemicu segalanya?
+          </div>
+        `,
+        "Tutup",
+        () => closeModal()
       );
+    }
+
+    function selectTimelineStep(type) {
+      const sequence = ['PLOT', 'RAID', 'REPORT', 'FAMINE'];
+      if (type === sequence[c3TimelineState - 1]) {
+        playSound('correct');
+        const btn = document.getElementById('ev-' + type.toLowerCase());
+        btn.style.borderColor = "var(--accent-green)";
+        btn.style.background = "rgba(34, 197, 94, 0.2)";
+        btn.disabled = true;
+
+        c3TimelineState++;
+        if (c3TimelineState > 4) {
+          gameState.c3.ready = true;
+          renderChapter3Hotspots();
+          document.getElementById('c3-tl-feedback').style.borderLeftColor = "var(--accent-green)";
+          document.getElementById('c3-tl-feedback').innerHTML = `
+            <strong style="color:var(--accent-green);">✨ Rantai Kausalitas Sah Terbukti:</strong><br>
+            Persekongkolan ➔ Pengalihan Fisik ➔ Penutupan Grafik ➔ Kelaparan Rakyat.<br><br>
+            <em>Sidang Vonis di Singgasana Raja [ ★ ] kini telah TERBUKA!</em>
+          `;
+          addLog("Kronologi kausalitas berhasil direkonstruksi dengan tepat. Sidang terbuka.");
+        } else {
+          document.getElementById('c3-tl-feedback').innerHTML = `<span style="color:var(--accent-green);">Urutan ${c3TimelineState - 1} tepat! Pilih peristiwa logis berikutnya (Tahap ${c3TimelineState})...</span>`;
+        }
+      } else {
+        playSound('wrong');
+        updateSiri(-5);
+        document.getElementById('c3-tl-feedback').innerHTML = `<span style="color:var(--accent-red);">Keliru! Peristiwa ini tidak dapat terjadi pada tahapan ke-${c3TimelineState}. Teliti alur sebab dan akibatnya. (-5% Siri')</span>`;
+      }
     }
 
     function openChapter3Quiz() {
+      if (!gameState.c3.ready) {
+        playSound('wrong');
+        showModal(
+          "Sidang Terkunci",
+          `<div class="book-card" style="border-left-color:var(--accent-red);">
+            Susun rantai peristiwa pada berkas <strong>[ ! Rekonstruksi Kausalitas ]</strong> terlebih dahulu sebelum menghadap Raja!
+          </div>`
+        );
+        return;
+      }
+
       playSound('buku');
       if (gameState.c3.stage === 1) {
         showModal(
           "Evaluasi Tahap 1: Arah Waktu",
           `
-            <p>Mungkinkah penderitaan kelaparan rakyat di <strong>Hari 9</strong> yang menyebabkan Adipati memindahkan pasokan di <strong>Hari 5</strong>?</p>
-            <button class="quiz-option" onclick="submitC3Quiz(1, 'mungkin1')">A. Mungkin, karena terjadi berdekatan di bulan sama.</button>
-            <button class="quiz-option" onclick="submitC3Quiz(1, 'mungkin2')">B. Mungkin, asalkan ada saksi mata yang melihat.</button>
-            <button class="quiz-option" onclick="submitC3Quiz(1, 'pasti')">C. Pasti, karena angka 9 lebih besar dari angka 5.</button>
-            <button class="quiz-option" onclick="submitC3Quiz(1, 'mustahil')">D. Mustahil, akibat tidak bisa mendahului sebabnya.</button>
+            <p>Mungkinkah kelaparan rakyat di masa akhir yang menjadi penyebab Adipati menyita lumbung pasokan di awal waktu?</p>
+            <button class="quiz-option" onclick="submitC3Quiz(1, 'mungkin1')">A. Mungkin, karena kedua peristiwa terjadi dalam periode waktu yang sama.</button>
+            <button class="quiz-option" onclick="submitC3Quiz(1, 'mustahil')">B. Mustahil, karena akibat di masa depan tidak bisa mendahului sebabnya.</button>
+            <button class="quiz-option" onclick="submitC3Quiz(1, 'mungkin2')">C. Mungkin, asalkan ada saksi mata di pengadilan.</button>
+            <button class="quiz-option" onclick="submitC3Quiz(1, 'pasti')">D. Pasti, peristiwa besar selalu memicu peristiwa masa lalu.</button>
           `,
           "Tutup"
         );
@@ -1095,11 +1239,11 @@ startTimer(8);
         showModal(
           "Evaluasi Tahap 2: Korelasi vs Kausalitas",
           `
-            <p>Adipati berkilah krisis pangan hanya kebetulan (korelasi semu) akibat cuaca. Bukti mana yang memastikan ini adalah Kausalitas murni?</p>
-            <button class="quiz-option" onclick="submitC3Quiz(2, 'otomatis')">A. Semua kejadian berurutan pasti otomatis saling memicu.</button>
-            <button class="quiz-option" onclick="submitC3Quiz(2, 'firasat')">B. Rakyat desa punya firasat bahwa Adipati pelakunya.</button>
-            <button class="quiz-option" onclick="submitC3Quiz(2, 'bersama')">C. Kejadian buruk bersamaan pasti saling memengaruhi.</button>
-            <button class="quiz-option" onclick="submitC3Quiz(2, 'kausalitas')">D. Ada mekanisme nyata yang mengikat kedua kejadian.</button>
+            <p>Adipati berkilah bahwa krisis pangan hanyalah kebetulan (korelasi semu) bersamaan dengan musim kemarau. Bukti apa yang menggugurkan alibinya?</p>
+            <button class="quiz-option" onclick="submitC3Quiz(2, 'kausalitas')">A. Adanya surat perintah pengangkutan fisik (mekanisme nyata pengikat).</button>
+            <button class="quiz-option" onclick="submitC3Quiz(2, 'otomatis')">B. Semua kejadian berurutan otomatis saling menjadi penyebab.</button>
+            <button class="quiz-option" onclick="submitC3Quiz(2, 'firasat')">C. Firasat dan dugaan emosional warga desa.</button>
+            <button class="quiz-option" onclick="submitC3Quiz(2, 'bersama')">D. Dua hal buruk yang terjadi bersamaan pasti saling memicu.</button>
           `,
           "Tutup"
         );
@@ -1108,88 +1252,81 @@ startTimer(8);
           "Evaluasi Tahap 3: Kesimpulan",
           `
             <p>Berdasarkan bukti mekanisme fisik dan prinsip urutan waktu, siapakah dalang utama penyebab hancurnya Siri' Kerajaan?</p>
-            <button class="quiz-option" onclick="submitC3Quiz(3, 'salah1')">A. Rakyat desa panik dan menciptakan krisis suasana.</button>
-            <button class="quiz-option" onclick="submitC3Quiz(3, 'salah2')">B. Pejabat pembuat grafik yang menggambar data laporannya.</button>
-            <button class="quiz-option" onclick="submitC3Quiz(3, 'salah3')">C. Cuaca buruk yang kebetulan datang melanda desa.</button>
-            <button class="quiz-option" onclick="submitC3Quiz(3, 'benar')">D. Adipati yang menyita dan memindahkan pasokan.</button>
+            <button class="quiz-option" onclick="submitC3Quiz(3, 'salah1')">A. Rakyat desa yang panik dan menciptakan krisis suasana.</button>
+            <button class="quiz-option" onclick="submitC3Quiz(3, 'salah2')">B. Pejabat pembuat grafik yang sekadar menggambar laporan.</button>
+            <button class="quiz-option" onclick="submitC3Quiz(3, 'benar')">C. Adipati yang menyita dan memindahkan pasokan ke gudangnya.</button>
+            <button class="quiz-option" onclick="submitC3Quiz(3, 'salah3')">D. Cuaca buruk yang kebetulan melanda daerah luar.</button>
           `,
           "Tutup"
         );
       }
     }
 
-function submitC3Quiz(stage, choice) {
-  if (stage === 1) {
-    if (choice === 'mustahil') {
-      playSound('correct'); // <--- Audio Jawaban Benar
-      gameState.c3.stage = 2;
-      addLog("Tahap 1 Berhasil: Urutan waktu dipahami.");
-      showModal("Logika Kronologis Sah!", `<div class="book-card" style="border-left-color: var(--accent-green);">Tepat! Waktu hanya berjalan maju. Syarat utama Kausalitas adalah <strong>Sebab harus mendahului akibat</strong>.</div>`, "Lanjut ke Tahap 2", () => openChapter3Quiz());
-    } else {
-      playSound('wrong'); // <--- Audio Jawaban Salah
-if (updateSiri(-10)) return;
-      let reason = "";
-      if (choice === 'mungkin1' || choice === 'mungkin2') reason = "Waktu tidak berjalan mundur. Hari 9 tidak mungkin menjadi penyebab Hari 5.";
-      if (choice === 'pasti') reason = "Besarnya angka (9 > 5) justru membuktikan bahwa Hari 5 terjadi lebih dahulu.";
-      addLog("Tahap 1 keliru.");
-      showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter3Quiz());
-    }
-  } else if (stage === 2) {
-    if (choice === 'kausalitas') {
-      playSound('correct'); // <--- Audio Jawaban Benar
-      gameState.c3.stage = 3;
-      addLog("Tahap 2 Berhasil: Kausalitas dibuktikan.");
-      showModal("Alibi Dipatahkan!", `<div class="book-card" style="border-left-color: var(--accent-green);">Luar biasa! Urutan waktu yang tepat ditambah <strong>mekanisme fisik pengikat</strong> mengonfirmasi Kausalitas sejati.</div>`, "Lanjut ke Kesimpulan", () => openChapter3Quiz());
-    } else {
-      playSound('wrong'); // <--- Audio Jawaban Salah
-if (updateSiri(-10)) return;
-      let reason = "";
-      if (choice === 'otomatis') reason = "Tidak semua kejadian berurutan adalah sebab-akibat (ayam berkokok mendahului fajar, tapi bukan ayam penyebab matahari terbit). Urutan butuh mekanisme.";
-      if (choice === 'firasat') reason = "Firasat bukan bukti statistika yang sah.";
-      if (choice === 'bersama') reason = "Kejadian bersamaan (korelasi semu) butuh mekanisme penghubung fisik agar terbukti sebagai kausalitas.";
-      addLog("Tahap 2 keliru.");
-      showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter3Quiz());
-    }
-  } else {
-    if (choice === 'benar') {
-      gameState.c3.solved = true;
-      clearInterval(gameState.timerInterval);
-      gameState.savedTimeSec = (gameState.savedTimeSec || 0) + gameState.timerSec; // <--- Simpan sisa waktu Bab 3
-      addLog("Bab 3 Selesai: Vonis dijatuhkan.");
+    function submitC3Quiz(stage, choice) {
+      if (stage === 1) {
+        if (choice === 'mustahil') {
+          playSound('correct');
+          gameState.c3.stage = 2;
+          addLog("Tahap 1 Berhasil: Urutan waktu dipahami.");
+          showModal("Logika Kronologis Sah!", `<div class="book-card" style="border-left-color: var(--accent-green);">Tepat! Waktu hanya berjalan maju. Syarat utama Kausalitas adalah <strong>Sebab harus mendahului akibat</strong>.</div>`, "Lanjut ke Tahap 2", () => openChapter3Quiz());
+        } else {
+          playSound('wrong');
+          if (updateSiri(-10)) return;
+          let reason = "Waktu tidak berjalan mundur. Kejadian akibat di masa akhir tidak mungkin menjadi pemicu tindakan awal.";
+          addLog("Tahap 1 keliru.");
+          showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter3Quiz());
+        }
+      } else if (stage === 2) {
+        if (choice === 'kausalitas') {
+          playSound('correct');
+          gameState.c3.stage = 3;
+          addLog("Tahap 2 Berhasil: Kausalitas dibuktikan.");
+          showModal("Alibi Dipatahkan!", `<div class="book-card" style="border-left-color: var(--accent-green);">Luar biasa! Urutan waktu yang tepat ditambah <strong>mekanisme fisik pengikat</strong> mengonfirmasi Kausalitas sejati.</div>`, "Lanjut ke Kesimpulan", () => openChapter3Quiz());
+        } else {
+          playSound('wrong');
+          if (updateSiri(-10)) return;
+          let reason = "Korelasi semu memerlukan mekanisme fisik penghubung agar sah diakui sebagai kausalitas.";
+          addLog("Tahap 2 keliru.");
+          showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter3Quiz());
+        }
+      } else {
+        if (choice === 'benar') {
+          gameState.c3.solved = true;
+          clearInterval(gameState.timerInterval);
+          gameState.savedTimeSec = (gameState.savedTimeSec || 0) + gameState.timerSec;
+          addLog("Bab 3 Selesai: Vonis dijatuhkan.");
 
-      // Efek stempel bukti sah sebelum vonis ditampilkan
-      triggerStampEffect(() => {
-        playSound('correct');
-        showModal(
-          "Vonis Ditegakkan!",
-          `<div class="book-card" style="border-left-color: var(--accent-green);">
-            Sempurna! Dengan stempel bukti sah, Adipati resmi dijatuhi hukuman dan seluruh pasokan pangan dikembalikan ke rakyat yang berhak.
-          </div>`,
-          "Buka Kemenangan ➔",
-          () => { closeModal(); loadOutro(); }
-        );
-      });
-    } else {
-      playSound('wrong'); // <--- Audio Jawaban Salah
-if (updateSiri(-10)) return;
-      let reason = "";
-      if (choice === 'salah1') reason = "Rakyat yang menderita hanyalah korban (Akibat akhir), bukan penyebab masalah.";
-      if (choice === 'salah2') reason = "Pembuat grafik hanya menutupi kejahatan yang sudah terjadi, bukan pemicu utama.";
-      if (choice === 'salah3') reason = "Cuaca buruk hanyalah alibi kebetulan untuk menutupi penyitaan.";
-      addLog("Tahap 3 keliru.");
-      showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter3Quiz());
+          triggerStampEffect(() => {
+            playSound('correct');
+            showModal(
+              "Vonis Ditegakkan!",
+              `<div class="book-card" style="border-left-color: var(--accent-green);">
+                Sempurna! Dengan stempel bukti sah, Adipati resmi dijatuhi hukuman dan seluruh pasokan pangan dikembalikan ke rakyat yang berhak.
+              </div>`,
+              "Buka Kemenangan ➔",
+              () => { closeModal(); loadOutro(); }
+            );
+          });
+        } else {
+          playSound('wrong');
+          if (updateSiri(-10)) return;
+          let reason = "";
+          if (choice === 'salah1') reason = "Rakyat yang menderita hanyalah korban (Akibat akhir), bukan penyebab masalah.";
+          if (choice === 'salah2') reason = "Pembuat grafik hanya menutupi kejahatan yang sudah terjadi, bukan pemicu utama.";
+          if (choice === 'salah3') reason = "Cuaca buruk hanyalah alibi kebetulan untuk menutupi penyitaan.";
+          addLog("Tahap 3 keliru.");
+          showModal("Penjelasan Pilihan:", `<div class="book-card" style="border-left-color:var(--accent-red);">${reason}</div>`, "Coba Lagi", () => openChapter3Quiz());
+        }
+      }
     }
-  }
-}
+
     function triggerStampEffect(callback) {
       playSound('stamp');
-      
       const stampEl = document.createElement('div');
       stampEl.className = 'stamp-overlay';
       stampEl.innerText = 'BUKTI SAH';
       document.body.appendChild(stampEl);
 
-      // Beri jeda 800ms agar pemain menikmati efeknya sebelum membuka modal
       setTimeout(() => {
         stampEl.remove();
         if (callback) callback();
@@ -1204,12 +1341,10 @@ if (updateSiri(-10)) return;
       gameState.chapter = "outro";
       chapterDisplay.innerText = "Selesai: Penghakiman";
       
-      // Total alokasi waktu 3 bab = 3 x 8 menit = 24 menit (1440 detik)
       const totalSaved = gameState.savedTimeSec || 0;
       const totalAllocatedSec = 3 * 8 * 60; 
       const usedSec = Math.max(0, totalAllocatedSec - totalSaved);
 
-      // Format Waktu Digunakan (Menit:Detik)
       const usedM = String(Math.floor(usedSec / 60)).padStart(2, "0");
       const usedS = String(usedSec % 60).padStart(2, "0");
 
@@ -1219,7 +1354,6 @@ if (updateSiri(-10)) return;
       logPanel.classList.add("hidden");
       gameBody.classList.add("full-width-body");
 
-      // Penentuan Gelar, Warna, dan Ulasan
       let title = "";
       let titleColor = "";
       let feedback = "";
@@ -1246,11 +1380,9 @@ if (updateSiri(-10)) return;
         feedback = "Luar biasa tanpa cela! Integritas Siri' terjaga murni dan keadilan statistik tegak sempurna di seluruh kerajaan.";
       }
 
-      // Evaluasi Lencana Khusus
       let badgesHTML = "";
       let earnedBadges = [];
 
-      // Lencana 1: Mata Rajawali (Siri' 100% tanpa salah)
       if (gameState.siri === 100) {
         earnedBadges.push(`
           <div class="badge-card">
@@ -1263,14 +1395,13 @@ if (updateSiri(-10)) return;
         `);
       }
 
-      // Lencana 2: Penyelidik Gesit (Total Waktu Digunakan <= 10 Menit / 600 Detik)
       if (usedSec <= 600) {
         earnedBadges.push(`
           <div class="badge-card">
             <span class="badge-icon">⚡</span>
             <div style="text-align: left;">
               <div class="badge-title">Penyelidik Gesit</div>
-              <div class="badge-desc">Deduksi kilat! Menyelesaikan seluruh bab hanya dalam waktu ${usedM}:${usedS}.</div>
+              <div class="badge-desc">Deduksi kilat! Menyelesaikan seluruh investigasi hanya dalam waktu ${usedM}:${usedS}.</div>
             </div>
           </div>
         `);
@@ -1292,7 +1423,6 @@ if (updateSiri(-10)) return;
           <div class="intro-content">
             <h2 style="color: var(--accent-green); margin-bottom: 8px; font-family:'Segoe UI', sans-serif;">🎉 Kemakmuran Kerajaan Pulih</h2>
             
-            <!-- Kotak Gelar Hasil Investigasi -->
             <div class="book-card" style="border-left-color: ${titleColor}; background: rgba(15,23,42,0.95); max-width: 600px; margin: 0 auto 16px auto; text-align: left;">
               <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Evaluasi Penyelidik:</div>
               <div style="font-size: 1.25rem; font-weight: bold; color: ${titleColor}; margin: 4px 0 6px 0;">
@@ -1307,12 +1437,11 @@ if (updateSiri(-10)) return;
               ${badgesHTML}
             </div>
 
-            <!-- Rangkuman Buku Catatan -->
             <div class="book-card" style="text-align: left; max-width: 600px; margin: 0 auto 16px auto;">
               <strong>Buku Catatan Literasi Data Selesai Ditulis:</strong><br><br>
-              • <strong>Bab 1:</strong> Memahami sebaran data, menghitung rentang, dan mendeteksi bahaya angka <strong>Pencilan (Outlier)</strong> yang menarik rata-rata dan menutupi kekurangan pihak lain.<br><br>
-              • <strong>Bab 2:</strong> Membongkar manipulasi pemotongan skala visual grafik, serta mengutamakan nilai <strong>Median</strong> agar titik tengah kebal terhadap angka ekstrem.<br><br>
-              • <strong>Bab 3:</strong> Membuktikan <strong>Kausalitas (Sebab-Akibat)</strong> dengan memastikan adanya bukti mekanisme fisik dan sebab kronologis yang mendahului akibatnya.
+              • <strong>Bab 1:</strong> Memahami sebaran data, menghitung rentang, dan mendeteksi bahaya angka <strong>Pencilan (Outlier)</strong>.<br><br>
+              • <strong>Bab 2:</strong> Membongkar manipulasi pemotongan skala grafik, serta mengutamakan nilai <strong>Median</strong>.<br><br>
+              • <strong>Bab 3:</strong> Membuktikan <strong>Kausalitas (Sebab-Akibat)</strong> dengan memastikan mekanisme fisik dan urutan kronologis yang sah.
             </div>
 
             <button class="btn-action" onclick="loadIntro()" style="max-width: 240px; margin: 0 auto;">Tutup Buku Catatan ➔</button>
