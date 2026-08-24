@@ -502,7 +502,6 @@
       gameState.siri = Math.max(0, Math.min(100, gameState.siri + amount));
       siriDisplay.innerText = `Siri': ${gameState.siri}%`;
       
-      // Pengecekan Efek Kritis (< 40%)
       if (gameState.siri < 40 && gameState.siri > 0) {
         document.body.classList.add("critical-siri");
       } else {
@@ -520,21 +519,22 @@
         if (gameState.siri <= 0) {
           document.body.classList.remove("critical-siri");
           stopBGM();
-          playSound('gameOver'); // Putar audio game over
+          playSound('gameOver');
           clearInterval(gameState.timerInterval);
           clearTimeout(gameState.hintTimeout);
           
-          // Tampilkan modal kekalahan dengan tombol coba lagi (agar audio tidak terputus)
           showModal(
             "<span style='color:var(--accent-red);'>Siri' Runtuh! Game Over</span>",
             `<div class="book-card" style="border-left-color:var(--accent-red);">
-              Nilai Siri' kerajaan telah habis ($0\\%$). Kehormatan dan integritas data gagal diselamatkan.
+              Nilai Siri' kerajaan telah habis (0%). Kehormatan dan integritas data gagal diselamatkan.
             </div>`,
             "Ulangi Investigasi ↺",
             () => { closeModal(); loadIntro(); }
           );
+          return true; // Menandakan Game Over
         }
       }
+      return false;
     }
 
     function startTimer(minutes, onExpire) {
@@ -770,7 +770,7 @@ function viewDocB() {
       showModal("Tepat Sekali!", `<div class="book-card" style="border-left-color: var(--accent-green);">Angka 212 adalah <strong>Pencilan (Outlier)</strong>, yaitu nilai yang posisinya terpisah sangat jauh dari kelompoknya.</div>`, "Lanjut ke Tahap 2", () => openChapter1Quiz());
     } else {
       playSound('wrong'); // <--- Audio Jawaban Salah
-      updateSiri(-10);
+if (updateSiri(-10)) return;
       let reason = "";
       if (choice === 'mean') reason = "Rata-rata (Mean) adalah nilai hasil bagi keseluruhan kelompok, bukan sebutan untuk suatu angka terasing.";
       if (choice === 'modus') reason = "Modus adalah angka yang paling sering muncul (dalam hal ini 44).";
@@ -786,7 +786,7 @@ function viewDocB() {
       showModal("Tepat!", `<div class="book-card" style="border-left-color: var(--accent-green);">Secara matematika memang benar 80, tapi angka itu mengelabui realitas karena ditarik naik oleh 1 angka ekstrem saja.</div>`, "Lanjut ke Kesimpulan", () => openChapter1Quiz());
     } else {
       playSound('wrong'); // <--- Audio Jawaban Salah
-      updateSiri(-10);
+if (updateSiri(-10)) return;
       let reason = "";
       if (choice === 'akurat') reason = "Meskipun dihitung dari semua angka, hasilnya gagal mewakili kondisi mayoritas karena ditarik 1 angka raksasa.";
       if (choice === 'standar') reason = "Angka 80 muncul murni akibat perhitungan matematika yang terseret angka ekstrem 212, bukan standar resmi.";
@@ -803,7 +803,7 @@ function viewDocB() {
       showModal("Evaluasi Bab 1 Selesai!", `<div class="book-card" style="border-left-color: var(--accent-green);">Penyelidikan sempurna! Kamu telah memahami bagaimana Rata-rata (Mean) bisa menyembunyikan ketimpangan jika di dalamnya ada Pencilan (Outlier).</div>`, "Buka Bab 2 ➔", () => { closeModal(); loadChapter2(); });
     } else {
       playSound('wrong'); // <--- Audio Jawaban Salah
-      updateSiri(-10);
+if (updateSiri(-10)) return;
       let reason = "";
       if (choice === 'pecahan') reason = "Rata-rata tidak selalu menghasilkan pecahan.";
       if (choice === 'buang') reason = "Membuang data wilayah kecil sama dengan memanipulasi informasi.";
@@ -969,7 +969,7 @@ function viewGraphBiasInfo() {
       showModal("Analisis Tepat!", `<div class="book-card" style="border-left-color: var(--accent-green);">Memotong batas sumbu grafik adalah manipulasi agar batang tertinggi tampak pendek. Bentuk grafik apa pun sah, tapi memotong skalanya adalah kebohongan.</div>`, "Lanjut ke Tahap 2", () => openChapter2Quiz());
     } else {
       playSound('wrong'); // <--- Audio Jawaban Salah
-      updateSiri(-10);
+if (updateSiri(-10)) return;
       let reason = "";
       if (choice === 'tambah') reason = "Grafik tidak bisa mengubah jumlah barang di dunia nyata.";
       if (choice === 'ubah') reason = "Bentuk grafik tetap batang, manipulasi terjadi pada pemotongan skalanya.";
@@ -985,7 +985,7 @@ function viewGraphBiasInfo() {
       showModal("Keputusan Tepat!", `<div class="book-card" style="border-left-color: var(--accent-green);">Bagus! Saat ada angka pencilan raksasa, Median (Nilai Tengah) adalah satu-satunya ukuran yang netral mewakili mayoritas.</div>`, "Lanjut ke Tahap 3", () => openChapter2Quiz());
     } else {
       playSound('wrong'); // <--- Audio Jawaban Salah
-      updateSiri(-10);
+if (updateSiri(-10)) return;
       let reason = "";
       if (choice === 'mean') reason = "Menggunakan Mean di sini hanya menguntungkan si penimbun karena nilainya ditarik naik oleh angka ekstrem.";
       if (choice === 'modus') reason = "Modus tidak dipilih berdasarkan simpati, melainkan karena ia tidak mewakili titik pusat data keseluruhan.";
@@ -1002,7 +1002,7 @@ function viewGraphBiasInfo() {
       showModal("Evaluasi Bab 2 Selesai!", `<div class="book-card" style="border-left-color: var(--accent-green);">Sangat kritis! Kita tetap mengakui keberadaan data pencilan 212, namun kita tidak membiarkan nilai tersebut menyesatkan simpulan untuk sisa kelompok.</div>`, "Buka Bab 3 ➔", () => { closeModal(); loadChapter3(); });
     } else {
       playSound('wrong'); // <--- Audio Jawaban Salah
-      updateSiri(-10);
+if (updateSiri(-10)) return;
       let reason = "";
       if (choice === 'salah1') reason = "Data 212 ton adalah realita lapangan (korupsi), bukan salah tulis, jadi pantang dihapus.";
       if (choice === 'salah2') reason = "Statistika tidak membenarkan pembagian nilai asli secara sewenang-wenang.";
@@ -1127,7 +1127,7 @@ function submitC3Quiz(stage, choice) {
       showModal("Logika Kronologis Sah!", `<div class="book-card" style="border-left-color: var(--accent-green);">Tepat! Waktu hanya berjalan maju. Syarat utama Kausalitas adalah <strong>Sebab harus mendahului akibat</strong>.</div>`, "Lanjut ke Tahap 2", () => openChapter3Quiz());
     } else {
       playSound('wrong'); // <--- Audio Jawaban Salah
-      updateSiri(-10);
+if (updateSiri(-10)) return;
       let reason = "";
       if (choice === 'mungkin1' || choice === 'mungkin2') reason = "Waktu tidak berjalan mundur. Hari 9 tidak mungkin menjadi penyebab Hari 5.";
       if (choice === 'pasti') reason = "Besarnya angka (9 > 5) justru membuktikan bahwa Hari 5 terjadi lebih dahulu.";
@@ -1142,7 +1142,7 @@ function submitC3Quiz(stage, choice) {
       showModal("Alibi Dipatahkan!", `<div class="book-card" style="border-left-color: var(--accent-green);">Luar biasa! Urutan waktu yang tepat ditambah <strong>mekanisme fisik pengikat</strong> mengonfirmasi Kausalitas sejati.</div>`, "Lanjut ke Kesimpulan", () => openChapter3Quiz());
     } else {
       playSound('wrong'); // <--- Audio Jawaban Salah
-      updateSiri(-10);
+if (updateSiri(-10)) return;
       let reason = "";
       if (choice === 'otomatis') reason = "Tidak semua kejadian berurutan adalah sebab-akibat (ayam berkokok mendahului fajar, tapi bukan ayam penyebab matahari terbit). Urutan butuh mekanisme.";
       if (choice === 'firasat') reason = "Firasat bukan bukti statistika yang sah.";
@@ -1171,7 +1171,7 @@ function submitC3Quiz(stage, choice) {
       });
     } else {
       playSound('wrong'); // <--- Audio Jawaban Salah
-      updateSiri(-10);
+if (updateSiri(-10)) return;
       let reason = "";
       if (choice === 'salah1') reason = "Rakyat yang menderita hanyalah korban (Akibat akhir), bukan penyebab masalah.";
       if (choice === 'salah2') reason = "Pembuat grafik hanya menutupi kejahatan yang sudah terjadi, bukan pemicu utama.";
