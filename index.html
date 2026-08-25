@@ -795,7 +795,7 @@ function selectBag(id) {
 
     // KUIS EVALUASI BAB 2 (Penalaran Pilihan Ganda Asli)
     function openChapter2Quiz() {
-      if (!gameState.c2.ready) { playSound('wrong'); alert("Gunakan alat rekonstruksi grafik dan pelajari teorinya terlebih dahulu!"); return; }
+      if (!gameState.c2.ready) { playSound('wrong'); alert("Gunakan alat rekonstruksi grafik terlebih dahulu!"); return; }
       playSound('lampu');
       if (gameState.c2.stage === 1) {
         showModal("Evaluasi Tahap 1: Ilusi Skala Visual",
@@ -814,12 +814,15 @@ function selectBag(id) {
            <button class="quiz-option" onclick="submitC2Quiz(2, 'median')">D. Median (48 ton), karena tangguh (robust) melawan outlier ekstrem dan membelah pusat data secara faktual.</button>
           `, "Tutup");
       } else {
-        showModal("Evaluasi Tahap 3: Logika Ketahanan Nilai Tengah",
-          `<p style="margin-bottom:10px; color:#cbd5e1;">Meskipun kita tahu satu lumbung menimbun 53% pangan, mengapa kita seolah 'mengabaikan' beban berat 212 ton tersebut saat menggunakan Median?</p>
-           <button class="quiz-option" onclick="submitC2Quiz(3, 'salah1')">A. Karena 212 ton dianggap salah ketik dalam pendataan sehingga otomatis dihapus.</button>
-           <button class="quiz-option" onclick="submitC2Quiz(3, 'benar')">B. Kita tidak membuangnya, melainkan Median murni mengambil urutan titik pusat tanpa terseret beban ekstrem nilai di ujungnya.</button>
-           <button class="quiz-option" onclick="submitC2Quiz(3, 'salah2')">C. Karena dalam regulasi statistika, angka yang melampaui separuh total (100+) wajib diabaikan agar data tampak indah.</button>
-           <button class="quiz-option" onclick="submitC2Quiz(3, 'salah3')">D. Karena tugas utama analis data semata-mata hanya mencari angka-angka yang ganjil dan membuang yang genap.</button>
+        // -- PERUBAHAN TAHAP 3 BAB 2: PENGALIHAN INDIKATOR DATA --
+        showModal("Evaluasi Tahap 3: Pengalihan Indikator Data",
+          `<div class="book-card" style="margin-top:0; border-left-color:var(--accent-red);"><strong>Bantahan Adipati:</strong> "Baiklah, mungkin bentuk grafiknya keliru. Tapi lihat grafik baruku ini! Batangnya menjulang tinggi menembus target! Ini bukti program pangan kita sukses besar!"</div>
+           <p style="margin-bottom:10px; color:#cbd5e1;">Kamu meneliti grafik baru yang batangnya tampak sangat tinggi tersebut. Ternyata, tulisan kecil pada label indikatornya bukanlah 'Volume Pangan', melainkan <strong>'Tingkat Angka Kelahiran'</strong>.</p>
+           <p style="margin-bottom:10px; color:#cbd5e1;">Secara literasi data, apa nama trik manipulasi pelaporan yang sedang dilakukan Adipati?</p>
+           <button class="quiz-option" onclick="submitC2Quiz(3, 'salah1')">A. Memanipulasi visual ukuran skala sumbu agar grafik terlihat lebih dramatis.</button>
+           <button class="quiz-option" onclick="submitC2Quiz(3, 'benar')">B. Menyajikan data dengan indikator lain yang nilainya tinggi agar seolah-olah sukses di bidang pangan.</button>
+           <button class="quiz-option" onclick="submitC2Quiz(3, 'salah2')">C. Menyembunyikan nama desa-desa miskin dari laporan agar grafiknya tetap bersih.</button>
+           <button class="quiz-option" onclick="submitC2Quiz(3, 'salah3')">D. Menggunakan angka nilai rata-rata (Mean) yang sangat bias untuk mengelabui total keseluruhan.</button>
           `, "Tutup");
       }
     }
@@ -827,8 +830,8 @@ function selectBag(id) {
     function submitC2Quiz(stage, choice) {
       if (stage === 1) {
         if (choice === 'benar') {
-          playSound('correct'); gameState.c2.stage = 2; addLog("Evaluasi 1: Ilusi visual dipahami.");
-          showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Memotong batas sumbu grafik adalah trik manipulasi visual klasik untuk memendekkan secara ilusi tinggi batang yang tidak wajar.</div>`, "Lanjut Tahap 2 ➔", () => openChapter2Quiz());
+          playSound('correct'); gameState.c2.stage = 2; addLog("Evaluasi 1: Ilusi skala dipahami.");
+          showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Memotong batas sumbu grafik adalah trik manipulasi ruang visual klasik untuk memendekkan secara ilusi tinggi batang yang tidak wajar.</div>`, "Lanjut Tahap 2 ➔", () => openChapter2Quiz());
         } else {
           playSound('wrong'); if (updateSiri(-10)) return; addLog("Evaluasi 1 keliru.");
           showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Grafik tidak mengubah data beras secara nyata, ia hanya membengkokkan persepsi mata pembaca. (-10% Siri')</div>`, "Coba Lagi", () => openChapter2Quiz());
@@ -842,14 +845,16 @@ function selectBag(id) {
           showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Ingat kelebihan utama Median! Ukuran manakah yang paling kokoh dan tidak peduli dengan tarikan angka ekstrem? (-10% Siri')</div>`, "Coba Lagi", () => openChapter2Quiz());
         }
       } else {
+        // -- PERUBAHAN RESPON TAHAP 3 BAB 2 --
         if (choice === 'benar') {
           gameState.c2.solved = true; gameState.savedTimeSec += gameState.timerSec; addLog("Bab 2 Tuntas.");
           triggerStampEffect(() => {
-            showModal("Evaluasi Bab 2 Selesai!", `<div class="book-card" style="border-left-color:var(--accent-green);">Luar Biasa! Kita tidak memalsukan dan tidak membuang data 212 Ton, namun kita memastikan nilai monopoli 53% tersebut tidak mengaburkan fakta kondisi sisa kelompok.</div>`, "Buka Bab 3 ➔", () => { closeModal(); loadChapter3(); });
+            playSound('clear'); // SFX Clear dipanggil di sini untuk penanda menang Bab
+            showModal("Evaluasi Bab 2 Selesai!", `<div class="book-card" style="border-left-color:var(--accent-green);">Luar Biasa! Kamu berhasil membongkar dua kebohongan visual sekaligus: pemotongan skala sumbu dan pengalihan indikator metrik yang tidak relevan. Ketimpangan tak bisa lagi disembunyikan!</div>`, "Buka Bab 3 ➔", () => { closeModal(); loadChapter3(); });
           });
         } else {
           playSound('wrong'); if (updateSiri(-10)) return; addLog("Evaluasi 3 keliru.");
-          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Median tidak pernah membuang atau menghapus data secara sepihak. Cermati lagi bagaimana cara kerjanya memilih posisi. (-10% Siri')</div>`, "Coba Lagi", () => openChapter2Quiz());
+          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Fokus pada teks kecil di grafik barunya. Adipati tidak lagi mengubah bentuk grafiknya, melainkan mengganti isi topiknya dengan indikator yang tidak ada hubungannya dengan pangan! (-10% Siri')</div>`, "Coba Lagi", () => openChapter2Quiz());
         }
       }
     }
