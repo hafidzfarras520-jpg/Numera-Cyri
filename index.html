@@ -669,13 +669,15 @@ function selectBag(id) {
       `;
     }
 
-    // INTERAKSI BAB 2 (BARU): Mencari Median langsung dari Grafik Bar
-    function viewMedianGraph() {
+function viewMedianGraph() {
       if(gameState.c2.medianLearned) { playSound('buku'); showModal("Median Visual", "Median 48 Ton adalah indikator faktual yang kebal terhadap manipulasi batang ekstrem."); return; }
-      playSound('buku');
+      playSound('grafik');
       showModal("Alat Visual: Identifikasi Titik Tengah (Median)",
-        `<p style="font-size:0.95rem; color:#cbd5e1; margin-bottom:12px;">Rata-rata 80 Ton telah terbukti bias karena tertarik oleh dominasi 53% milik Adipati. Untuk mencari nilai wajar mayoritas, kita harus mencari <strong>Median (Nilai Tengah)</strong>.</p>
-         <p style="font-size:0.85rem; color:var(--accent-gold); margin-bottom:12px;">Data di bawah telah diurutkan dari terkecil ke terbesar. <strong>Klik pada batang grafik</strong> yang letaknya tepat di tengah barisan populasi!</p>
+        `<p style="font-size:0.95rem; color:#cbd5e1; margin-bottom:8px;">Rata-rata 80 Ton telah terbukti bias karena ditarik naik oleh dominasi 53% milik Adipati. Untuk mengukur kondisi faktual mayoritas rakyat, analis independen menggunakan <strong>Median (Nilai Tengah)</strong>.</p>
+         <div class="book-card" style="border-left-color:var(--accent-cyan); font-size:0.85rem; margin-top:0;">
+           <strong>Logika Analis:</strong> Berbeda dengan Mean yang terseret angka raksasa, Median murni mengambil titik pusat setelah data diurutkan.
+         </div>
+         <p style="font-size:0.85rem; color:var(--accent-gold); margin-bottom:12px;">Data di bawah telah diurutkan (44, 44, 48, 52, 212). <strong>Klik pada batang grafik</strong> yang letaknya tepat membelah barisan populasi di posisi tengah!</p>
 
          <div style="border-left:2px solid #64748b; padding-left:10px; display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
             <div style="display:flex; align-items:center; gap:8px;">
@@ -708,7 +710,6 @@ function selectBag(id) {
         `, "Tutup"
       );
     }
-
     function checkMedianClick(val) {
       if (val === 48) {
         playSound('correct');
@@ -793,7 +794,8 @@ function selectBag(id) {
       }
     }
 
-   function openChapter2Quiz() {
+   // KUIS EVALUASI BAB 2 (Tahap 2: Survei Hantu, Tahap 3: Pengalihan Indikator)
+    function openChapter2Quiz() {
       if (!gameState.c2.ready) { playSound('wrong'); alert("Gunakan alat rekonstruksi grafik terlebih dahulu!"); return; }
       playSound('lampu');
       if (gameState.c2.stage === 1) {
@@ -805,15 +807,20 @@ function selectBag(id) {
            <button class="quiz-option" onclick="submitC2Quiz(1, 'jelas')">D. Menampilkan angka tertinggi secara lebih menonjol dan transparan kepada pembaca laporan.</button>
           `, "Tutup");
       } else if (gameState.c2.stage === 2) {
-        showModal("Evaluasi Tahap 2: Ukuran Pemusatan Alternatif",
-          `<p style="margin-bottom:10px; color:#cbd5e1;">Menyadari bahwa Rata-rata 80 Ton itu menyesatkan (karena dominasi 53% di satu lumbung), ukuran pemusatan statistik manakah yang paling jujur kamu laporkan sebagai analis?</p>
-           <button class="quiz-option" onclick="submitC2Quiz(2, 'mean')">A. Mean (80 ton), karena secara hukum wajib dan adil menjumlahkan semua nilai tanpa kecuali.</button>
-           <button class="quiz-option" onclick="submitC2Quiz(2, 'modus')">B. Modus (44 ton), semata-mata karena itu angka terendah dan memunculkan simpati massa.</button>
-           <button class="quiz-option" onclick="submitC2Quiz(2, 'max')">C. Maksimal (212 ton), karena ini mencerminkan kapasitas pencapaian batas tertinggi kerajaan.</button>
-           <button class="quiz-option" onclick="submitC2Quiz(2, 'median')">D. Median (48 ton), karena tangguh (robust) melawan outlier ekstrem dan membelah pusat data secara faktual.</button>
+        // -- TAHAP 2: ANOMALI SAMPEL VS POPULASI ("SURVEI HANTU") --
+        showModal("Evaluasi Tahap 2: Validitas Data Sampel",
+          `<div class="book-card" style="margin-top:0; border-left-color:var(--accent-red);">
+            <strong>Bantahan Adipati:</strong> "Tuduhan kalian tidak berdasar! Lihat hasil survei petisi resmi ini: <strong>25.000 kepala keluarga di 5 wilayah</strong> menyatakan setuju pasokan mereka dipusatkan ke lumbung utama demi masa depan!"
+           </div>
+           <p style="margin-bottom:10px; color:#cbd5e1;">Kamu memeriksa Buku Sensus Kependudukan Kerajaan. Tercatat bahwa total seluruh kepala keluarga di ke-5 wilayah tersebut sebenarnya hanya berjumlah <strong>10.000 KK</strong>.</p>
+           <p style="margin-bottom:10px; color:#cbd5e1;">Secara literasi data, kejanggalan fatal apa yang membuktikan bahwa klaim survei Adipati adalah rekayasa fiktif?</p>
+           <button class="quiz-option" onclick="submitC2Quiz(2, 'salah1')">A. Adipati salah menghitung nilai rata-rata (Mean) dari responden yang mengisi survei.</button>
+           <button class="quiz-option" onclick="submitC2Quiz(2, 'benar')">B. Jumlah sampel responden pendukung (25.000) mustahil secara logika karena melebihi total seluruh populasi riil (10.000).</button>
+           <button class="quiz-option" onclick="submitC2Quiz(2, 'salah2')">C. Petisi tersebut tidak sah karena tidak menampilkan diagram batang persentase kepuasan.</button>
+           <button class="quiz-option" onclick="submitC2Quiz(2, 'salah3')">D. Petisi seharusnya menggunakan perhitungan Median agar suara minoritas tetap terwakili.</button>
           `, "Tutup");
       } else {
-        // -- PERUBAHAN TAHAP 3 BAB 2: LEBIH SUBTIL & PROFESIONAL --
+        // -- TAHAP 3: PENGALIHAN INDIKATOR (CHERRY-PICKING METRICS) --
         showModal("Evaluasi Tahap 3: Pengalihan Indikator Data",
           `<div class="book-card" style="margin-top:0; border-left-color:var(--accent-red);"><strong>Bantahan Adipati:</strong> "Baiklah, mungkin batas grafiknya keliru. Tapi lihat grafik baruku ini! Batangnya menjulang tinggi menembus target! Ini bukti program kita sukses besar!"</div>
            <p style="margin-bottom:10px; color:#cbd5e1;">Kamu meneliti grafik baru yang diklaim sangat sukses tersebut. Saat diperhatikan lebih jeli, tulisan kecil pada label indikatornya mencantumkan <strong>'Tingkat Angka Kelahiran'</strong>.</p>
@@ -836,20 +843,19 @@ function selectBag(id) {
           showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Grafik tidak mengubah data beras secara nyata, ia hanya membengkokkan persepsi mata pembaca. (-10% Siri')</div>`, "Coba Lagi", () => openChapter2Quiz());
         }
       } else if (stage === 2) {
-        if (choice === 'median') {
-          playSound('correct'); gameState.c2.stage = 3; addLog("Evaluasi 2: Median dipilih.");
-          showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Median (Nilai Tengah) dari 44, 44, <strong>[48]</strong>, 52, 212 adalah 48 Ton. Ini jauh lebih faktual mewakili kondisi 80% wilayah dibandingkan rata-rata 80 Ton.</div>`, "Lanjut Tahap 3 ➔", () => openChapter2Quiz());
+        if (choice === 'benar') {
+          playSound('correct'); gameState.c2.stage = 3; addLog("Evaluasi 2: Survei fiktif dibongkar.");
+          showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Secara kaidah metodologi data, <strong>jumlah sampel ($n$) tidak akan pernah bisa melampaui ukuran total populasi ($N$)</strong>. Klaim 25.000 responden di wilayah berpopulasi 10.000 terbukti sebagai data palsu (Survei Hantu)!</div>`, "Lanjut Tahap 3 ➔", () => openChapter2Quiz());
         } else {
           playSound('wrong'); if (updateSiri(-10)) return; addLog("Evaluasi 2 keliru.");
-          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Ingat kelebihan utama Median! Ukuran manakah yang paling kokoh dan tidak peduli dengan tarikan angka ekstrem? (-10% Siri')</div>`, "Coba Lagi", () => openChapter2Quiz());
+          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Bandingkan dua angka tersebut: Jumlah pendukung yang diklaim (25.000) vs Total seluruh penduduk yang ada di wilayah itu (10.000). Mengapa angka itu tidak masuk akal? (-10% Siri')</div>`, "Coba Lagi", () => openChapter2Quiz());
         }
       } else {
-        // -- PERUBAHAN RESPON TAHAP 3 BAB 2 --
         if (choice === 'benar') {
           gameState.c2.solved = true; gameState.savedTimeSec += gameState.timerSec; addLog("Bab 2 Tuntas.");
           triggerStampEffect(() => {
-            playSound('clear'); // SFX Clear dipanggil di sini untuk penanda menang Bab
-            showModal("Evaluasi Bab 2 Selesai!", `<div class="book-card" style="border-left-color:var(--accent-green);">Luar Biasa! Kamu berhasil membongkar dua kebohongan sekaligus: distorsi skala sumbu dan taktik pengalihan indikator (cherry-picking). Angka kelahiran yang tinggi sama sekali tidak menutup fakta bahwa pangan dimonopoli!</div>`, "Buka Bab 3 ➔", () => { closeModal(); loadChapter3(); });
+            playSound('clear');
+            showModal("Evaluasi Bab 2 Selesai!", `<div class="book-card" style="border-left-color:var(--accent-green);">Luar Biasa! Kamu berhasil membongkar manipulasi skala sumbu, survei hantu yang melebihi populasi, dan taktik pengalihan indikator metrik yang tidak relevan.</div>`, "Buka Bab 3 ➔", () => { closeModal(); loadChapter3(); });
           });
         } else {
           playSound('wrong'); if (updateSiri(-10)) return; addLog("Evaluasi 3 keliru.");
