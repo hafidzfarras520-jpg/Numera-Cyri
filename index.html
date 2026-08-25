@@ -845,7 +845,7 @@ function viewMedianGraph() {
       } else if (stage === 2) {
         if (choice === 'benar') {
           playSound('correct'); gameState.c2.stage = 3; addLog("Evaluasi 2: Survei fiktif dibongkar.");
-          showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Secara kaidah metodologi data, <strong>jumlah sampel ($n$) tidak akan pernah bisa melampaui ukuran total populasi ($N$)</strong>. Klaim 25.000 responden di wilayah berpopulasi 10.000 terbukti sebagai data palsu (Survei Hantu)!</div>`, "Lanjut Tahap 3 ➔", () => openChapter2Quiz());
+          showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Secara kaidah metodologi data, <strong>jumlah sampel tidak akan pernah bisa melampaui ukuran total populasi</strong>. Klaim 25.000 responden di wilayah berpopulasi 10.000 terbukti sebagai data palsu (Survei Hantu)!</div>`, "Lanjut Tahap 3 ➔", () => openChapter2Quiz());
         } else {
           playSound('wrong'); if (updateSiri(-10)) return; addLog("Evaluasi 2 keliru.");
           showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Bandingkan dua angka tersebut: Jumlah pendukung yang diklaim (25.000) vs Total seluruh penduduk yang ada di wilayah itu (10.000). Mengapa angka itu tidak masuk akal? (-10% Siri')</div>`, "Coba Lagi", () => openChapter2Quiz());
