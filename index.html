@@ -113,7 +113,7 @@
     .drag-bag:active { transform: scale(0.95); }
     .drop-box {
       border: 2px dashed #475569; background: rgba(15, 23, 42, 0.4); border-radius: 8px; padding: 12px;
-      min-height: 60px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; transition: all 0.2s;
+      min-height: 80px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; transition: all 0.2s;
       cursor: pointer;
     }
     .drop-box:hover, .drop-box:active { border-color: var(--accent-cyan); background: rgba(56, 189, 248, 0.1); }
@@ -492,21 +492,23 @@ function stopClear() { sounds.clear.pause(); sounds.clear.currentTime = 0; }
       );
     }
 
-    function selectBag(id) {
+function selectBag(id) {
       playSound('click');
       selectedBagId = id;
-      // Reset warna semua karung
-      document.querySelectorAll('.drag-bag').forEach(b => {
+      
+      // Reset warna hanya pada karung yang belum dipindah (masih di source-zone)
+      document.querySelectorAll('#source-zone .drag-bag').forEach(b => {
         b.style.borderColor = '#64748b';
         b.style.background = '#1e293b';
       });
-      // Beri highlight pada karung yang dipilih
+      
+      // Beri efek nyala (highlight) pada karung yang sedang dipilih
       document.getElementById(id).style.borderColor = 'var(--accent-gold)';
       document.getElementById(id).style.background = 'rgba(251, 191, 36, 0.2)';
     }
 
     function handleTapDrop(targetZone) {
-      if (!selectedBagId) return; // Abaikan jika belum klik karung
+      if (!selectedBagId) return; // Abaikan jika belum memilih karung apa-apa
       const bagEl = document.getElementById(selectedBagId);
       const val = parseInt(bagEl.getAttribute('data-val'));
 
@@ -521,26 +523,27 @@ function stopClear() { sounds.clear.pause(); sounds.clear.currentTime = 0; }
         return; 
       }
       
-      // Pindahkan elemen
+      // Pindahkan elemen karung ke kotak tujuan
       document.getElementById(targetZone + '-zone').appendChild(bagEl);
       
-      // Kembalikan tampilan karung seperti semula
-      bagEl.style.borderColor = '#64748b';
-      bagEl.style.background = '#1e293b';
+      // KUNCI KARUNG: Matikan highlight dan matikan pointer agar klik tembus ke kotak
+      bagEl.style.borderColor = 'var(--accent-green)';
+      bagEl.style.background = 'rgba(34, 197, 94, 0.1)';
+      bagEl.style.pointerEvents = 'none'; // <-- Membuat klik tembus ke kotak di bawahnya
+      bagEl.style.cursor = 'default';
+      
       selectedBagId = null;
       playSound('correct');
       
-      // Cek kemenangan Sortir
-      const normalZone = document.getElementById('normal-zone');
-      const outlierZone = document.getElementById('outlier-zone');
-      if (normalZone.children.length === 4 && outlierZone.children.length === 1) {
+      if (document.getElementById('normal-zone').children.length === 4 && document.getElementById('outlier-zone').children.length === 1) {
         gameState.c1.bagSorted = true; checkC1Ready();
+        // FEEDBACK NUMERASI KUAT
         document.getElementById('c1-feedback').style.borderLeftColor = "var(--accent-green)";
         document.getElementById('c1-feedback').innerHTML = `
           <strong style="color:var(--accent-green);">Klasifikasi Berhasil. Perhatikan Kalkulasi Ini:</strong><br>
           • Rata-rata 4 wilayah stabil (kiri) adalah <strong>47 Ton</strong>.<br>
           • Namun, jika digabung dengan anomali 212 Ton (kanan), Rata-rata Total melesat menjadi <strong>80 Ton!</strong><br>
-          <em>(Total 400 Ton dibagi 5 wilayah = 80 Ton). Evaluasi kini terbuka.</em>
+          <em>(Total 400 Ton dibagi 5 wilayah = 80 Ton).</em>
         `;
       }
     }
