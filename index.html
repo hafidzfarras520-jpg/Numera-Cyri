@@ -248,7 +248,7 @@
     };
     sounds.bgm.loop = true; sounds.bgm.volume = 0.9;
     sounds.clear.loop = true; 
-    sounds.clear.volume = 0.75;
+    sounds.clear.volume = 0.55;
     function playSound(name) { if (sounds[name]) { sounds[name].currentTime = 0; sounds[name].play().catch(() => {}); } }
     function playBGM() { sounds.bgm.play().catch(() => {}); }
     function stopBGM() { sounds.bgm.pause(); sounds.bgm.currentTime = 0; }
