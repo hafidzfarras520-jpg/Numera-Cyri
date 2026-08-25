@@ -793,8 +793,7 @@ function selectBag(id) {
       }
     }
 
-    // KUIS EVALUASI BAB 2 (Penalaran Pilihan Ganda Asli)
-    function openChapter2Quiz() {
+   function openChapter2Quiz() {
       if (!gameState.c2.ready) { playSound('wrong'); alert("Gunakan alat rekonstruksi grafik terlebih dahulu!"); return; }
       playSound('lampu');
       if (gameState.c2.stage === 1) {
@@ -814,15 +813,15 @@ function selectBag(id) {
            <button class="quiz-option" onclick="submitC2Quiz(2, 'median')">D. Median (48 ton), karena tangguh (robust) melawan outlier ekstrem dan membelah pusat data secara faktual.</button>
           `, "Tutup");
       } else {
-        // -- PERUBAHAN TAHAP 3 BAB 2: PENGALIHAN INDIKATOR DATA --
+        // -- PERUBAHAN TAHAP 3 BAB 2: LEBIH SUBTIL & PROFESIONAL --
         showModal("Evaluasi Tahap 3: Pengalihan Indikator Data",
-          `<div class="book-card" style="margin-top:0; border-left-color:var(--accent-red);"><strong>Bantahan Adipati:</strong> "Baiklah, mungkin bentuk grafiknya keliru. Tapi lihat grafik baruku ini! Batangnya menjulang tinggi menembus target! Ini bukti program pangan kita sukses besar!"</div>
-           <p style="margin-bottom:10px; color:#cbd5e1;">Kamu meneliti grafik baru yang batangnya tampak sangat tinggi tersebut. Ternyata, tulisan kecil pada label indikatornya bukanlah 'Volume Pangan', melainkan <strong>'Tingkat Angka Kelahiran'</strong>.</p>
-           <p style="margin-bottom:10px; color:#cbd5e1;">Secara literasi data, apa nama trik manipulasi pelaporan yang sedang dilakukan Adipati?</p>
-           <button class="quiz-option" onclick="submitC2Quiz(3, 'salah1')">A. Memanipulasi visual ukuran skala sumbu agar grafik terlihat lebih dramatis.</button>
-           <button class="quiz-option" onclick="submitC2Quiz(3, 'benar')">B. Menyajikan data dengan indikator lain yang nilainya tinggi agar seolah-olah sukses di bidang pangan.</button>
-           <button class="quiz-option" onclick="submitC2Quiz(3, 'salah2')">C. Menyembunyikan nama desa-desa miskin dari laporan agar grafiknya tetap bersih.</button>
-           <button class="quiz-option" onclick="submitC2Quiz(3, 'salah3')">D. Menggunakan angka nilai rata-rata (Mean) yang sangat bias untuk mengelabui total keseluruhan.</button>
+          `<div class="book-card" style="margin-top:0; border-left-color:var(--accent-red);"><strong>Bantahan Adipati:</strong> "Baiklah, mungkin batas grafiknya keliru. Tapi lihat grafik baruku ini! Batangnya menjulang tinggi menembus target! Ini bukti program kita sukses besar!"</div>
+           <p style="margin-bottom:10px; color:#cbd5e1;">Kamu meneliti grafik baru yang diklaim sangat sukses tersebut. Saat diperhatikan lebih jeli, tulisan kecil pada label indikatornya mencantumkan <strong>'Tingkat Angka Kelahiran'</strong>.</p>
+           <p style="margin-bottom:10px; color:#cbd5e1;">Secara literasi data, apa bentuk manipulasi pelaporan yang sedang dilakukan Adipati?</p>
+           <button class="quiz-option" onclick="submitC2Quiz(3, 'salah1')">A. Memanipulasi visual ukuran skala sumbu agar perbedaan antar batang terlihat lebih dramatis.</button>
+           <button class="quiz-option" onclick="submitC2Quiz(3, 'benar')">B. Mengalihkan fokus menggunakan metrik sekunder yang bernilai positif, meski sama sekali tidak relevan dengan esensi masalah.</button>
+           <button class="quiz-option" onclick="submitC2Quiz(3, 'salah2')">C. Menyembunyikan sampel dari desa-desa dengan performa buruk agar keseluruhan rata-rata tampak tinggi.</button>
+           <button class="quiz-option" onclick="submitC2Quiz(3, 'salah3')">D. Menggunakan angka nilai rata-rata (Mean) yang bias untuk mengelabui pembaca terhadap total populasi.</button>
           `, "Tutup");
       }
     }
@@ -850,11 +849,11 @@ function selectBag(id) {
           gameState.c2.solved = true; gameState.savedTimeSec += gameState.timerSec; addLog("Bab 2 Tuntas.");
           triggerStampEffect(() => {
             playSound('clear'); // SFX Clear dipanggil di sini untuk penanda menang Bab
-            showModal("Evaluasi Bab 2 Selesai!", `<div class="book-card" style="border-left-color:var(--accent-green);">Luar Biasa! Kamu berhasil membongkar dua kebohongan visual sekaligus: pemotongan skala sumbu dan pengalihan indikator metrik yang tidak relevan. Ketimpangan tak bisa lagi disembunyikan!</div>`, "Buka Bab 3 ➔", () => { closeModal(); loadChapter3(); });
+            showModal("Evaluasi Bab 2 Selesai!", `<div class="book-card" style="border-left-color:var(--accent-green);">Luar Biasa! Kamu berhasil membongkar dua kebohongan sekaligus: distorsi skala sumbu dan taktik pengalihan indikator (cherry-picking). Angka kelahiran yang tinggi sama sekali tidak menutup fakta bahwa pangan dimonopoli!</div>`, "Buka Bab 3 ➔", () => { closeModal(); loadChapter3(); });
           });
         } else {
           playSound('wrong'); if (updateSiri(-10)) return; addLog("Evaluasi 3 keliru.");
-          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Fokus pada teks kecil di grafik barunya. Adipati tidak lagi mengubah bentuk grafiknya, melainkan mengganti isi topiknya dengan indikator yang tidak ada hubungannya dengan pangan! (-10% Siri')</div>`, "Coba Lagi", () => openChapter2Quiz());
+          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Perhatikan metrik yang diukur pada grafik barunya. Apakah indikator tersebut memiliki hubungan logis dengan kasus kelangkaan pangan yang sedang diinvestigasi? (-10% Siri')</div>`, "Coba Lagi", () => openChapter2Quiz());
         }
       }
     }
