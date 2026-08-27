@@ -635,10 +635,12 @@ function selectBag(id) {
     /* =========================================================
        3. BAB 2: SKALA GRAFIK & MEDIAN
        ========================================================= */
-    function loadChapter2() {
+function loadChapter2() {
+      stopClear();
+      playBGM();
       gameState.chapter = "c2"; chapterDisplay.innerText = "Bab 2"; sceneCanvas.style.backgroundImage = "url('22.png')";
       addLog("Bab 2: Membongkar Skala & Mencari Titik Tengah."); startTimer(8);
-      leftPanel.innerHTML = `<div class="status-panel"><strong>Petunjuk:</strong> Gunakan tuas visual grafik <strong style="color:var(--accent-cyan);">[ ! ]</strong> untuk merekonstruksi data skala penuh, lalu buka <strong style="color:var(--accent-gold);">[ ★ ] Evaluasi</strong>.</div>`;
+      leftPanel.innerHTML = `<div class="status-panel"><strong>Petunjuk:</strong> Gunakan tuas visual grafik <strong style="color:var(--accent-cyan);">[ ! ]</strong> untuk merekonstruksi data, lalu masuk ke <strong style="color:var(--accent-gold);">[ ★ ] Evaluasi</strong>.</div>`;
       checkC2Ready();
     }
 
@@ -864,19 +866,32 @@ function viewMedianGraph() {
       }
     }
 
-    /* =========================================================
-       4. BAB 3: KORELASI VS KAUSALITAS
-       ========================================================= */
-    function loadChapter3() {
+   function loadChapter3() {
+      stopClear(); // Menghentikan musik clear bab sebelumnya
+      playBGM();   // Memutar kembali musik latar investigasi
       gameState.chapter = "c3"; chapterDisplay.innerText = "Bab 3"; sceneCanvas.style.backgroundImage = "url('31.png')";
-      addLog("Bab 3: Hukum Sebab-Akibat."); startTimer(8);
-      leftPanel.innerHTML = `<div class="status-panel"><strong>Petunjuk:</strong> Pahami syarat Kausalitas dan susun alat urutan linimasa <strong style="color:var(--accent-cyan);">[ ! ]</strong> untuk membuka sidang akhir <strong style="color:var(--accent-gold);">[ ★ ]</strong>.</div>`;
+      addLog("Bab 3: Kausalitas & Arah Korelasi."); startTimer(8);
+      
+      gameState.c3 = { auditRead: false, correlationFixed: false, ready: false, stage: 1 };
+
+      leftPanel.innerHTML = `
+        <div class="vn-dialogue-box" style="margin-bottom:12px; border-color:var(--accent-red);">
+          <div class="vn-avatar">🧐</div>
+          <div>
+            <div class="vn-speaker" style="color:var(--accent-red);">Alibi Adipati</div>
+            <div class="vn-text">"Kalian menuduh saya memiskinkan rakyat? Hubungan angka-angka ini cuma kebetulan! Kalian bahkan tidak tahu bagaimana arah hubungan data di lapangan!"</div>
+          </div>
+        </div>
+        <div class="status-panel">
+          <strong>Misi Akhir:</strong> Buktikan adanya bukti mekanisme fisik sebab-akibat (Kausalitas) dan tentukan arah korelasi variabel data di lapangan <strong style="color:var(--accent-cyan);">[ ! ]</strong> untuk membuka sidang vonis <strong style="color:var(--accent-gold);">[ ★ ]</strong>.
+        </div>
+      `;
       checkC3Ready();
     }
 
     function checkC3Ready() {
-      if (gameState.c3.auditRead && gameState.c3.timelineFixed && !gameState.c3.ready) {
-        gameState.c3.ready = true; addLog("Linimasa kronologis dikunci. Evaluasi terbuka!");
+      if (gameState.c3.auditRead && gameState.c3.correlationFixed && !gameState.c3.ready) {
+        gameState.c3.ready = true; addLog("Bukti kausalitas & arah korelasi terbukti. Sidang dibuka!");
       }
       renderC3Hotspots();
     }
@@ -884,14 +899,14 @@ function viewMedianGraph() {
     function renderC3Hotspots() {
       const cls = gameState.c3.ready ? "" : "locked";
       const lbl = gameState.c3.ready ? "★ Sidang Vonis Akhir" : "🔒 Sidang Vonis (Terkunci)";
-      const lA = gameState.c3.auditRead ? "✅ Analisis Mutasi" : "❗ Teori Kausalitas Fisik";
-      const lB = gameState.c3.timelineFixed ? "✅ Linimasa Disusun" : "❗ Alat Rekonstruksi Waktu";
+      const lA = gameState.c3.auditRead ? "✅ Syarat Kausalitas" : "❗ Uji Mekanisme Kausalitas";
+      const lB = gameState.c3.correlationFixed ? "✅ Arah Relasi Teruji" : "❗ Uji Arah Korelasi Variabel";
 
       sceneCanvas.innerHTML = `
         <div class="hotspot" style="top: 55%; left: 10%; width: 25%; height: 35%;" onclick="viewWarehouseAudit()">
           <span class="hotspot-label">${lA}</span>
         </div>
-        <div class="hotspot" style="top: 55%; left: 38%; width: 25%; height: 35%;" onclick="viewTimeline()">
+        <div class="hotspot" style="top: 55%; left: 38%; width: 25%; height: 35%;" onclick="viewCorrelationTool()">
           <span class="hotspot-label">${lB}</span>
         </div>
         <div class="hotspot quiz-hotspot ${cls}" style="top: 15%; left: 68%; width: 26%; height: 70%;" onclick="openChapter3Quiz()">
@@ -899,17 +914,18 @@ function viewMedianGraph() {
         </div>
       `;
     }
-// INTERAKSI BAB 3: Pencarian Bukti & Susun Linimasa
+
+    // INTERAKSI 1: Syarat Kausalitas (Mekanisme Fisik)
     function viewWarehouseAudit() {
-      if(gameState.c3.auditRead) { playSound('buku'); showModal("Teori Mekanisme", "Bukti mekanisme fisik penggerak telah ditemukan. Alibi kebetulan alam berhasil dipatahkan."); return; }
+      if(gameState.c3.auditRead) { playSound('buku'); showModal("Teori Mekanisme", "Bukti mekanisme fisik penggerak telah ditemukan. Alibi kebetulan semu berhasil dipatahkan."); return; }
       playSound('buku');
       showModal("Analisis Teori: Korelasi vs Kausalitas",
-        `<div class="book-card" style="margin-top:0;"><strong>Hukum Statistika:</strong> 'Korelasi belum tentu Kausalitas'. Dua kejadian yang terjadi di waktu yang sama bisa jadi hanyalah kebetulan semata (Korelasi Semu) tanpa ada hubungan Sebab-Akibat.</div>
-         <p style="font-size:0.9rem; margin-top:5px;">Kelaparan desa terjadi di saat yang bersamaan dengan penuhnya gudang pusat. Secara logika pembuktian, apa syarat objektif yang diperlukan agar kita bisa menetapkan ini sebagai 'Sebab-Akibat' murni dan bukan korelasi kebetulan?</p>
-         <button class="quiz-option" onclick="answerC3Audit('salah1')">A. Mencari laporan perbandingan apakah cuaca ekstrem juga melanda daerah tetangga.</button>
-         <button class="quiz-option" onclick="answerC3Audit('benar')">B. Menemukan bukti mekanisme fisik dan tindakan nyata yang mengikat dua kejadian itu.</button>
-         <button class="quiz-option" onclick="answerC3Audit('salah2')">C. Meminta jejak pendapat lisan warga yang memiliki sentimen dan kecurigaan atas kondisi tersebut.</button>
-         <button class="quiz-option" onclick="answerC3Audit('salah3')">D. Membuktikan secara matematis bahwa persentase kekayaan pusat jauh lebih tinggi.</button>
+        `<div class="book-card" style="margin-top:0;"><strong>Hukum Statistika:</strong> Dua variabel yang bergerak bersamaan (Korelasi) belum tentu memiliki hubungan Sebab-Akibat (Kausalitas).</div>
+         <p style="font-size:0.9rem; margin-top:5px;">Kelaparan desa terjadi berbarengan dengan penuhnya gudang pusat. Syarat objektif apa yang mutlak diperlukan agar kita sah menetapkan ini sebagai 'Sebab-Akibat' (Kausalitas)?</p>
+         <button class="quiz-option" onclick="answerC3Audit('salah1')">A. Membandingkan data apakah daerah luar juga mengalami kelaparan serupa.</button>
+         <button class="quiz-option" onclick="answerC3Audit('benar')">B. Menemukan bukti mekanisme fisik dan tindakan nyata yang mengikat dan memindahkan variabel tersebut secara aktif.</button>
+         <button class="quiz-option" onclick="answerC3Audit('salah2')">C. Meminta sentimen lisan masyarakat terkait kecurigaan mereka.</button>
+         <button class="quiz-option" onclick="answerC3Audit('salah3')">D. Menghitung persentase margin keuntungan wilayah pusat.</button>
         `, "Tutup"
       );
     }
@@ -917,118 +933,106 @@ function viewMedianGraph() {
     function answerC3Audit(ans) {
       if(ans === 'benar') {
         playSound('correct'); gameState.c3.auditRead = true; checkC3Ready();
-        showModal("Benar!", `<div class="book-card" style="border-left-color:var(--accent-green);">Tepat! Kausalitas mensyaratkan adanya <strong>tindakan penggerak yang memfasilitasi terjadinya akibat</strong> (dalam hal ini pengerahan armada kereta kuda dan surat sita), bukan sekadar dugaan sentimen.</div>`);
+        showModal("Benar!", `<div class="book-card" style="border-left-color:var(--accent-green);">Tepat! Kausalitas mensyaratkan adanya <strong>tindakan mekanisme fisik yang menghubungkan sebab ke akibat</strong> (seperti armada kereta sita), bukan sekadar dua angka yang kebetulan bergerak bareng.</div>`);
       } else {
-        playSound('wrong'); updateSiri(-5); alert("Salah! Kausalitas menuntut fakta penggerak yang nyata, mengikat, dan dapat disajikan di pengadilan. (-5% Siri')");
+        playSound('wrong'); updateSiri(-5); alert("Salah! Kausalitas menuntut fakta instrumen penggerak nyata. (-5% Siri')");
       }
     }
 
-    let c3Step = 1;
-    function viewTimeline() {
-      if(gameState.c3.timelineFixed) { playSound('buku'); showModal("Rekonstruksi Selesai", "Urutan arah waktu telah dikunci sebagai syarat mutlak kausalitas."); return; }
-      playSound('buku'); c3Step = 1;
-      showModal("Alat Logika: Arah Waktu (Linimasa)",
-        `<div class="book-card" style="margin-top:0; border-left-color:var(--accent-red);">
-            <strong>Alibi Lanjutan Adipati:</strong> "Saya memindahkan 212 Ton gandum itu murni sebagai tindakan evakuasi darurat <em>karena</em> rakyat di desa sudah mulai kelaparan!"
+    // INTERAKSI 2: Uji Arah Korelasi (Positif, Negatif, Tidak Berhubungan)
+    function viewCorrelationTool() {
+      if(gameState.c3.correlationFixed) { playSound('buku'); showModal("Arah Korelasi Teruji", "Kamu telah memahami perbedaan pola korelasi positif, negatif, dan tanpa hubungan (nol)."); return; }
+      playSound('grafik');
+      showModal("Alat Uji: Menentukan Pola & Arah Relasi",
+        `<p style="font-size:0.9rem; color:#cbd5e1; margin-bottom:10px;">Periksa relasi antara dua variabel berikut:<br><strong>Variabel X:</strong> <em>Jumlah ton gandum yang ditarik ke lumbung pusat</em><br><strong>Variabel Y:</strong> <em>Tingkat gizi dan kecukupan makan warga desa</em></p>
+         <div class="book-card" style="border-left-color:var(--accent-cyan); font-size:0.85rem; margin-top:0;">
+           Fakta data: Setiap kali penarikan gandum ke pusat bertambah tinggi ($\u2191$), tingkat kecukupan makan warga desa justru anjlok menurun ($\u2193$).
          </div>
-         <p style="font-size:0.9rem; color:#cbd5e1; margin-bottom:12px;">Syarat utama kedua Kausalitas adalah: <strong>Sebab harus selalu mendahului Akibat</strong>. Untuk mematahkan alibi evakuasi di atas, susun kronologi fakta peristiwa sebenarnya dari Pemicu Awal hingga Akhir:</p>
-         <div style="display:flex; flex-direction:column; gap:8px; margin:10px 0;">
-            <button class="quiz-option" id="ev-report" onclick="tlClick('REPORT')" style="margin-top:0;">📜 Laporan statistik disamarkan dengan pemotongan sumbu visual</button>
-            <button class="quiz-option" id="ev-plot" onclick="tlClick('PLOT')" style="margin-top:0;">🤝 Rapat rahasia persekongkolan monopoli lumbung pusat</button>
-            <button class="quiz-option" id="ev-famine" onclick="tlClick('FAMINE')" style="margin-top:0;">🚨 Penderitaan krisis kelaparan mulai melanda desa-desa</button>
-            <button class="quiz-option" id="ev-raid" onclick="tlClick('RAID')" style="margin-top:0;">📦 212 Ton pasokan dipindahkan paksa ke pusat (Surat Sita)</button>
-         </div>
-         <div id="c3-tl-fb" class="book-card" style="border-left-color:var(--accent-gold); font-size:0.85rem;">Klik peristiwa mana yang menjadi titik mula dari rantai waktu ini!</div>
+         <p style="font-size:0.9rem; margin-bottom:10px;">Berdasarkan pola arah gerak kedua variabel di atas, hubungan tersebut tergolong ke dalam jenis korelasi apa?</p>
+         <button class="quiz-option" onclick="submitCorrelationCheck('positif')">📈 Korelasi Positif (Kedua variabel bergerak searah, jika X naik maka Y ikut naik)</button>
+         <button class="quiz-option" onclick="submitCorrelationCheck('negatif')">📉 Korelasi Negatif (Kedua variabel berlawanan arah, jika X naik maka Y turun)</button>
+         <button class="quiz-option" onclick="submitCorrelationCheck('nol')">⚪ Tidak Berhubungan / Korelasi Nol (Perubahan pada X tidak mempengaruhi pola nilai Y)</button>
         `, "Tutup"
       );
     }
 
-    function tlClick(type) {
-      const seq = ['PLOT', 'RAID', 'REPORT', 'FAMINE'];
-      if (type === seq[c3Step - 1]) {
-        playSound('correct');
-        const btn = document.getElementById('ev-' + type.toLowerCase());
-        btn.style.borderColor = "var(--accent-green)"; btn.style.color = "var(--accent-green)"; btn.disabled = true;
-        c3Step++;
-        if (c3Step > 4) {
-          gameState.c3.timelineFixed = true; checkC3Ready(); 
-          document.getElementById('c3-tl-fb').style.borderLeftColor = "var(--accent-green)";
-          document.getElementById('c3-tl-fb').innerHTML = `
-            <strong style="color:var(--accent-green);">Kronologi Dikunci!</strong><br>
-            1. Persekongkolan ➔ 2. Pengangkutan 212 Ton ➔ 3. Penyamaran Data ➔ 4. Krisis Kelaparan.<br>
-            <em>Arah waktu membuktikan tindakan elit mendahului penderitaan. Vonis Akhir terbuka!</em>
-          `;
-        } else {
-          document.getElementById('c3-tl-fb').innerHTML = `Urutan ${c3Step - 1} tepat! Klik peristiwa logis berikutnya...`;
-        }
+    function submitCorrelationCheck(ans) {
+      if (ans === 'negatif') {
+        playSound('correct'); gameState.c3.correlationFixed = true; checkC3Ready();
+        showModal("Analisis Arah Tepat!", `
+          <div class="book-card" style="border-left-color:var(--accent-green);">
+            <strong>Pola Korelasi Negatif Terverifikasi:</strong><br>
+            Ketika satu variabel meningkat tajam sementara variabel lainnya anjlok tertekan, arah hubungannya adalah <strong>Korelasi Negatif (Berlawanan Arah)</strong>.<br>
+            <em>Kedua alat uji Bab 3 telah lengkap. Sidang Vonis Akhir kini terbuka!</em>
+          </div>
+        `);
       } else {
         playSound('wrong'); updateSiri(-5);
-        document.getElementById('c3-tl-fb').innerHTML = `<span style="color:var(--accent-red);">Keliru! Peristiwa ini melanggar arah logika waktu. (-5%)</span>`;
+        alert("Keliru! Perhatikan arah anak panahnya: satu naik, satu turun. Itu bukan searah maupun acak. (-5% Siri')");
       }
     }
 
     // KUIS EVALUASI BAB 3 (Sidang Vonis Akhir)
     function openChapter3Quiz() {
-      if (!gameState.c3.ready) { playSound('wrong'); alert("Selesaikan teori mekanisme dan rekonstruksi linimasa terlebih dahulu!"); return; }
-      playSound('buku');
+      if (!gameState.c3.ready) { playSound('wrong'); alert("Selesaikan uji kausalitas dan uji arah korelasi terlebih dahulu!"); return; }
+      playSound('lampu');
       if (gameState.c3.stage === 1) {
-        showModal("Sidang Vonis Tahap 1: Pembuktian Arah Waktu",
-          `<p style="margin-bottom:10px; color:#cbd5e1;">Adipati berdalih ia memindahkan gandum secara darurat <strong>sebagai respons akibat melihat rakyat kelaparan</strong>. Berdasarkan rekonstruksi linimasa yang kamu kunci, patahkan argumen tersebut!</p>
-           <button class="quiz-option" onclick="submitC3Quiz(1, 'mungkin1')">A. Argumen tersebut mungkin benar karena peristiwa evakuasi darurat biasa terjadi merespons bencana.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(1, 'mustahil')">B. Argumen itu mustahil. Suatu akibat (kelaparan) di masa depan tidak bisa memicu perpindahan di masa lalu (sebab awal).</button>
-           <button class="quiz-option" onclick="submitC3Quiz(1, 'mungkin2')">C. Argumen ini tidak bisa dibantah kecuali ada dokumentasi kesaksian lisan di ruang pengadilan.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(1, 'pasti')">D. Argumen tersebut mutlak dibenarkan, karena penderitaan massal selalu menuntut tindakan reaktif pimpinan.</button>
+        showModal("Sidang Vonis Tahap 1: Pengujian Sebab-Akibat (Kausalitas)",
+          `<p style="margin-bottom:10px; color:#cbd5e1;">Adipati berkilah: <em>"Banyak hal di dunia ini terjadi bersamaan tanpa ada kaitan! Penuhnya gudang saya dan kelaparan warga murni korelasi kebetulan yang tidak memiliki hubungan sebab-akibat!"</em></p>
+           <p style="margin-bottom:10px; color:#cbd5e1;">Bagaimana kamu membuktikan secara metodologis bahwa peristiwa tersebut adalah <strong>Kausalitas murni</strong>?</p>
+           <button class="quiz-option" onclick="submitC3Quiz(1, 'benar')">A. Menunjukkan bukti mekanisme fisik langsung (surat sita & armada kereta) yang secara nyata memindahkan pasokan dari desa ke pusat.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(1, 'salah1')">B. Menyatakan bahwa setiap ada dua kejadian yang berdekatan waktunya, secara otomatis pasti ada hubungan kausalitas.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(1, 'salah2')">C. Mengandalkan pengakuan lisan para pejabat yang merasa curiga atas situasi di lapangan.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(1, 'salah3')">D. Membandingkan grafik luas wilayah dengan total konsumsi rata-rata penduduk.</button>
           `, "Tutup");
       } else if (gameState.c3.stage === 2) {
-        showModal("Sidang Vonis Tahap 2: Pembuktian Kausalitas Murni",
-          `<p style="margin-bottom:10px; color:#cbd5e1;">Alibi kedua: Adipati berkilah hilangnya pangan hanyalah <strong>kebetulan alam (korelasi)</strong> yang bertepatan dengan musim kemarau. Syarat mutlak apa yang menyudutkan tindakannya sebagai Kausalitas penimbunan aktif?</p>
-           <button class="quiz-option" onclick="submitC3Quiz(2, 'kausalitas')">A. Ditemukannya dokumen mekanisme pengangkatan fisik aktif (kereta kuda & surat sita) dari lumbung desa ke pusat.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(2, 'otomatis')">B. Hukum alam bahwa semua rentetan kejadian yang saling mengikuti sudah pasti dan otomatis menjadi penyebab utama.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(2, 'firasat')">C. Adanya laporan sentimen komunal masyarakat yang mencurigai kebijakan wilayah pada bulan itu.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(2, 'bersama')">D. Pemahaman umum bahwa musibah kemarau dan kerugian logistik yang bersamaan, pasti saling terkait langsung.</button>
+        showModal("Sidang Vonis Tahap 2: Pembuktian Arah Korelasi",
+          `<p style="margin-bottom:10px; color:#cbd5e1;">Hakim meminta analis membacakan kesimpulan hubungan variabel: <em>"Bagaimana pola matematis antara penimbunan lumbung pusat ($X$) terhadap tingkat kesejahteraan desa ($Y$)?"</em></p>
+           <button class="quiz-option" onclick="submitC3Quiz(2, 'salah1')">A. Korelasi Positif, karena penumpukan pangan pusat menaikkan angka rata-rata total di atas kertas.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(2, 'benar')">B. Korelasi Negatif, karena peningkatan timbunan di pusat secara berlawanan arah menekan habis kesejahteraan desa.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(2, 'salah2')">C. Korelasi Nol (Tidak Berhubungan), karena data kedua variabel diukur dalam satuan metrik yang berbeda.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(2, 'salah3')">D. Korelasi Semu, karena fluktuasi pangan murni dikendalikan oleh perubahan iklim tahunan.</button>
           `, "Tutup");
       } else {
-        showModal("Sidang Vonis Tahap Akhir: Kesimpulan",
-          `<p style="margin-bottom:10px; color:#cbd5e1;">Berdasarkan pemenuhan dua bukti tak terbantahkan (arah waktu historis yang membelakangi alibi + mekanisme fisik pengangkutan nyata), simpulan komprehensif apa yang bisa ditetapkan terkait krisis ini?</p>
-           <button class="quiz-option" onclick="submitC3Quiz(3, 'salah1')">A. Krisis bersumber dari rasa kepanikan publik yang secara merambat memicu disfungsi logistik kerakyatan.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(3, 'salah2')">B. Juru gambar grafik laporan adalah akar dari bencana ini karena sengaja menggambar diagram yang menyesatkan mata.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(3, 'benar')">C. Terjadi monopoli pasokan terencana oleh elit, yang kemudian ditutupi menggunakan instrumen rata-rata yang bias dan modifikasi visual.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(3, 'salah3')">D. Gangguan iklim adalah variabel mayoritas yang secara natural menyebabkan ketimpangan fatal di batas pasokan kerajaan.</button>
+        showModal("Sidang Vonis Tahap Akhir: Putusan Perkara",
+          `<p style="margin-bottom:10px; color:#cbd5e1;">Berdasarkan seluruh rangkaian bukti literasi data (pembongkaran bias rata-rata, pemulihan skala median, pembongkaran survei fiktif, serta validasi kausalitas dan korelasi negatif), apa vonis akhir yang sah?</p>
+           <button class="quiz-option" onclick="submitC3Quiz(3, 'salah1')">A. Masalah ini merupakan bencana alam murni yang memicu kepanikan logistik warga.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(3, 'salah2')">B. Kesalahan utama terletak pada juru gambar laporan karena salah memilih jenis diagram batang.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(3, 'benar')">C. Terbukti terjadi monopoli pasokan terencana yang berkorelasi negatif terhadap rakyat, yang sengaja ditutupi manipulasi visual dan statistik.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(3, 'salah3')">D. Krisis terjadi semata-mata karena jumlah sampel sensus yang kurang memadai.</button>
           `, "Tutup");
       }
     }
 
     function submitC3Quiz(stage, choice) {
       if (stage === 1) {
-        if (choice === 'mustahil') {
-          playSound('correct'); gameState.c3.stage = 2; addLog("Vonis 1: Alibi arah waktu digugurkan.");
-          showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Waktu hanya bergeser searah. Syarat mutlak Kausalitas adalah: <strong>Sebab harus selalu mendahului Akibat secara sekuensial</strong>. Alibi evakuasi daruratnya gugur total.</div>`, "Lanjut Tahap 2 ➔", () => openChapter3Quiz());
+        if (choice === 'benar') {
+          playSound('correct'); gameState.c3.stage = 2; addLog("Vonis 1: Kausalitas terbukti.");
+          showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Bantahan diterima! Keberadaan <strong>mekanisme fisik aktif</strong> membuktikan bahwa ini bukan korelasi kebetulan, melainkan hubungan sebab-akibat (kausalitas) nyata.</div>`, "Lanjut Tahap 2 ➔", () => openChapter3Quiz());
         } else {
           playSound('wrong'); if (updateSiri(-10)) return; addLog("Vonis 1 keliru.");
-          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Apakah aksi reaktif penyelamatan bisa dieksekusi <em>sebelum</em> krisis itu sendiri terjadi? Cermati asas kronologis yang Anda kumpulkan! (-10% Siri')</div>`, "Coba Lagi", () => openChapter3Quiz());
+          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Ingat syarat kausalitas: butuh bukti keterlibatan tindakan fisik/mekanisme yang menghubungkan kedua variabel! (-10% Siri')</div>`, "Coba Lagi", () => openChapter3Quiz());
         }
       } else if (stage === 2) {
-        if (choice === 'kausalitas') {
-          playSound('correct'); gameState.c3.stage = 3; addLog("Vonis 2: Alibi alam digugurkan.");
-          showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Dua kejadian insidental belum tentu saling berefek. Namun, eksistensi rekam jejak <strong>mekanisme fisik yang menggerakkannya secara paksa</strong> membuktikan hubungan itu adalah Kausalitas absolut.</div>`, "Bacakan Keputusan ➔", () => openChapter3Quiz());
+        if (choice === 'benar') {
+          playSound('correct'); gameState.c3.stage = 3; addLog("Vonis 2: Arah korelasi terbukti.");
+          showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Pola menunjukkan <strong>Korelasi Negatif</strong>: kenaikan pada timbunan lumbung Adipati secara langsung menyebabkan penurunan drastis pada ketahanan pangan warga.</div>`, "Bacakan Keputusan Akhir ➔", () => openChapter3Quiz());
         } else {
           playSound('wrong'); if (updateSiri(-10)) return; addLog("Vonis 2 keliru.");
-          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Korelasi semu (kebetulan) baru bisa runtuh saat dihadapkan pada bukti keterlibatan 'alat penggerak' yang nyata. Pahami substansi tindakan aktif tersebut. (-10% Siri')</div>`, "Coba Lagi", () => openChapter3Quiz());
+          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Cermati arah geraknya: saat $X$ naik dan $Y$ turun, hubungannya adalah berlawanan arah (negatif). (-10% Siri')</div>`, "Coba Lagi", () => openChapter3Quiz());
         }
       } else {
         if (choice === 'benar') {
           gameState.c3.solved = true; 
-          
           clearInterval(gameState.timerInterval); 
           clearTimeout(gameState.hintTimeout);
-          
           gameState.savedTimeSec += gameState.timerSec; addLog("Investigasi Selesai. Vonis Sah.");
           triggerStampEffect(() => {
-            showModal("VONIS AKHIR DITEGAKKAN!", `<div class="book-card" style="border-left-color:var(--accent-green);">Dengan pembongkaran bias rata-rata, pemulihan skala median grafik, dan penegakan prinsip kausalitas tanpa celah... Kebohongan elit dihempaskan dan alur pasokan dinormalkan!</div>`, "Buka Catatan Penyelidik ➔", () => { closeModal(); loadOutro(); });
+            showModal("VONIS AKHIR DITEGAKKAN!", `<div class="book-card" style="border-left-color:var(--accent-green);">Dengan pembongkaran manipulasi rata-rata, ilusi visual, dan pembuktian korelasi-kausalitas secara objektif... Integritas Siri' kerajaan resmi dipulihkan!</div>`, "Buka Catatan Penyelidik ➔", () => { closeModal(); loadOutro(); });
           });
         } else {
           playSound('wrong'); if (updateSiri(-10)) return; addLog("Vonis 3 keliru.");
-          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Jangan terdistraksi! Pelaku korporat bawahan (pembuat grafik) maupun narasi eksternal alam (cuaca) bukanlah penggerak inti dari monopoli nilai pangan tersebut. (-10% Siri')</div>`, "Coba Lagi", () => openChapter3Quiz());
+          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Pilih kesimpulan yang merangkum keseluruhan temuan investigasi secara komprehensif. (-10% Siri')</div>`, "Coba Lagi", () => openChapter3Quiz());
         }
       }
     }
