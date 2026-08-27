@@ -664,8 +664,8 @@ function loadChapter2() {
         <div class="hotspot" style="top: 35%; left: 45%; width: 20%; height: 50%;" onclick="viewMedianGraph()">
           <span class="hotspot-label">${lB}</span>
         </div>
-        <!-- BUG FIX: Pemanggilan openChapter2Quiz() yang benar -->
-        <div class="hotspot quiz-hotspot ${cls}" style="top: 15%; left: 30%; width: 38%; height: 32%;" onclick="openChapter2Quiz()">
+        <!-- BUG FIX: Pemanggilan Quiz() yang benar -->
+        <div class="hotspot quiz-hotspot ${cls}" style="top: 15%; left: 30%; width: 38%; height: 32%;" onclick="Quiz()">
           <span class="hotspot-label">${lbl}</span>
         </div>
       `;
@@ -801,12 +801,12 @@ function viewMedianGraph() {
       if (!gameState.c2.ready) { playSound('wrong'); alert("Gunakan alat rekonstruksi grafik terlebih dahulu!"); return; }
       playSound('lampu');
       if (gameState.c2.stage === 1) {
-        showModal("Evaluasi Tahap 1: Ilusi Skala Visual",
-          `<p style="margin-bottom:10px; color:#cbd5e1;">Apa efek manipulatif utama yang secara psikologis dihasilkan dari memotong skala sumbu vertikal grafik di angka 50?</p>
-           <button class="quiz-option" onclick="submitC2Quiz(1, 'benar')">A. Menyamarkan perbedaan kuantitas ekstrem agar wilayah penimbun terlihat setara dengan lainnya.</button>
-           <button class="quiz-option" onclick="submitC2Quiz(1, 'tambah')">B. Secara teknis menambah persentase beras nyata yang dialokasikan ke lumbung desa pinggiran.</button>
-           <button class="quiz-option" onclick="submitC2Quiz(1, 'ubah')">C. Mengubah jenis distribusi data dari histogram batang mendatar menjadi bentuk yang lebih modern.</button>
-           <button class="quiz-option" onclick="submitC2Quiz(1, 'jelas')">D. Menampilkan angka tertinggi secara lebih menonjol dan transparan kepada pembaca laporan.</button>
+        showModal("Evaluasi Tahap 1: Miskonsepsi Skala Sumbu Ekstrem",
+          `<p style="margin-bottom:10px; color:#cbd5e1;">Menganalisis trik manipulasi visual pada penyajian data anggaran, apa dampak ilusi pada mata yang akan terjadi pada gambar batang-batang grafik jika sengaja dipaksa menggunakan <strong>skala batas atas raksasa</strong> (misal skala dipatok hingga puluhan kali lipat dari nilai data)?</p>
+           <button class="quiz-option" onclick="submitC2Quiz(1, 'salah1')">A. Semua batang grafik akan memanjang vertikal hingga menembus batas teratas bidang visual laporan.</button>
+           <button class="quiz-option" onclick="submitC2Quiz(1, 'benar')">B. Semua batang grafik akan tampak menciut sangat pendek mendekati garis dasar (nol), sehingga perbedaan antar data tersamarkan seolah-olah bernilai sama.</button>
+           <button class="quiz-option" onclick="submitC2Quiz(1, 'salah2')">C. Urutan kategori data pada sumbu horizontal secara otomatis bertukar posisi dari nilai tertinggi ke terendah.</button>
+           <button class="quiz-option" onclick="submitC2Quiz(1, 'salah3')">D. Grafik batang akan otomatis terkonversi menjadi bentuk diagram lingkaran (pie chart).</button>
           `, "Tutup");
       } else if (gameState.c2.stage === 2) {
         // -- TAHAP 2: ANOMALI SAMPEL VS POPULASI ("SURVEI HANTU") --
@@ -838,11 +838,11 @@ function viewMedianGraph() {
     function submitC2Quiz(stage, choice) {
       if (stage === 1) {
         if (choice === 'benar') {
-          playSound('correct'); gameState.c2.stage = 2; addLog("Evaluasi 1: Ilusi skala dipahami.");
-          showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Memotong batas sumbu grafik adalah trik manipulasi ruang visual klasik untuk memendekkan secara ilusi tinggi batang yang tidak wajar.</div>`, "Lanjut Tahap 2 ➔", () => openChapter2Quiz());
+          playSound('correct'); gameState.c2.stage = 2; addLog("Evaluasi 1: Ilusi skala ekstrem dipahami.");
+          showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Memperbesar skala batas atas secara berlebihan akan <strong>memampatkan (mengecilkan) seluruh batang</strong> ke bawah garis dasar nol, membuat selisih data tampak hilang dan tampak datar bagi mata pembaca.</div>`, "Lanjut Tahap 2 ➔", () => openChapter2Quiz());
         } else {
           playSound('wrong'); if (updateSiri(-10)) return; addLog("Evaluasi 1 keliru.");
-          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Grafik tidak mengubah data beras secara nyata, ia hanya membengkokkan persepsi mata pembaca. (-10% Siri')</div>`, "Coba Lagi", () => openChapter2Quiz());
+          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Cermati kembali: jika batas atap grafik ditarik sangat tinggi ke angkasa, maka nilai-nilai kecil di bawah akan tampak gepeng dan tertekan ke bawah, bukan memanjang ke atas. (-10% Siri')</div>`, "Coba Lagi", () => openChapter2Quiz());
         }
       } else if (stage === 2) {
         if (choice === 'benar') {
@@ -939,19 +939,21 @@ function viewMedianGraph() {
       }
     }
 
-    // INTERAKSI 2: Uji Arah Korelasi (Positif, Negatif, Tidak Berhubungan)
-    function viewCorrelationTool() {
-      if(gameState.c3.correlationFixed) { playSound('buku'); showModal("Arah Korelasi Teruji", "Kamu telah memahami perbedaan pola korelasi positif, negatif, dan tanpa hubungan (nol)."); return; }
+  function viewCorrelationTool() {
+      if(gameState.c3.correlationFixed) { playSound('buku'); showModal("Arah Korelasi Teruji", "Kamu telah memahami analisis arah hubungan variabel secara empiris."); return; }
       playSound('grafik');
-      showModal("Alat Uji: Menentukan Pola & Arah Relasi",
-        `<p style="font-size:0.9rem; color:#cbd5e1; margin-bottom:10px;">Periksa relasi antara dua variabel berikut:<br><strong>Variabel X:</strong> <em>Jumlah ton gandum yang ditarik ke lumbung pusat</em><br><strong>Variabel Y:</strong> <em>Tingkat gizi dan kecukupan makan warga desa</em></p>
+      showModal("Alat Uji: Analisis Arah Hubungan Variabel",
+        `<p style="font-size:0.9rem; color:#cbd5e1; margin-bottom:10px;">Berdasarkan data audit berkala pengawasan kerajaan, perhatikan hubungan dua variabel empiris berikut:<br>
+          • <strong>Variabel $X$:</strong> <em>Indeks Transparansi & Keterbukaan Arsip Publik</em><br>
+          • <strong>Variabel $Y$:</strong> <em>Jumlah Temuan Kasus Korupsi & Penyelewengan Anggaran</em>
+         </p>
          <div class="book-card" style="border-left-color:var(--accent-cyan); font-size:0.85rem; margin-top:0;">
-           Fakta data: Setiap kali penarikan gandum ke pusat bertambah tinggi ($\u2191$), tingkat kecukupan makan warga desa justru anjlok menurun ($\u2193$).
+           <strong>Temuan Audit:</strong> Setiap kali tingkat keterbukaan sistem pengawasan dinaikkan tajam ($\uparrow$), angka penyimpangan dan kasus korupsi di wilayah tersebut tercatat anjlok menurun drastis ($\downarrow$).
          </div>
-         <p style="font-size:0.9rem; margin-bottom:10px;">Berdasarkan pola arah gerak kedua variabel di atas, hubungan tersebut tergolong ke dalam jenis korelasi apa?</p>
-         <button class="quiz-option" onclick="submitCorrelationCheck('positif')">📈 Korelasi Positif (Kedua variabel bergerak searah, jika X naik maka Y ikut naik)</button>
-         <button class="quiz-option" onclick="submitCorrelationCheck('negatif')">📉 Korelasi Negatif (Kedua variabel berlawanan arah, jika X naik maka Y turun)</button>
-         <button class="quiz-option" onclick="submitCorrelationCheck('nol')">⚪ Tidak Berhubungan / Korelasi Nol (Perubahan pada X tidak mempengaruhi pola nilai Y)</button>
+         <p style="font-size:0.9rem; margin-bottom:10px;">Berdasarkan analisis sifat pergerakan data tersebut, pola korelasi (hubungan) apa yang tergambar kuat antara variabel 'Transparansi' dengan 'Kasus Korupsi'?</p>
+         <button class="quiz-option" onclick="submitCorrelationCheck('positif')">📈 Korelasi Positif (Kedua variabel bergerak searah; naiknya transparansi memicu kenaikan korupsi)</button>
+         <button class="quiz-option" onclick="submitCorrelationCheck('negatif')">📉 Korelasi Negatif (Kedua variabel bergerak berlawanan arah; naiknya transparansi menekan angka kasus korupsi)</button>
+         <button class="quiz-option" onclick="submitCorrelationCheck('nol')">⚪ Tidak Berkorelasi / Korelasi Nol (Tingkat transparansi sama sekali tidak mempengaruhi tren angka korupsi)</button>
         `, "Tutup"
       );
     }
@@ -972,33 +974,32 @@ function viewMedianGraph() {
       }
     }
 
-    // KUIS EVALUASI BAB 3 (Sidang Vonis Akhir)
-    function openChapter3Quiz() {
+function openChapter3Quiz() {
       if (!gameState.c3.ready) { playSound('wrong'); alert("Selesaikan uji kausalitas dan uji arah korelasi terlebih dahulu!"); return; }
       playSound('lampu');
       if (gameState.c3.stage === 1) {
         showModal("Sidang Vonis Tahap 1: Pengujian Sebab-Akibat (Kausalitas)",
-          `<p style="margin-bottom:10px; color:#cbd5e1;">Adipati berkilah: <em>"Banyak hal di dunia ini terjadi bersamaan tanpa ada kaitan! Penuhnya gudang saya dan kelaparan warga murni korelasi kebetulan yang tidak memiliki hubungan sebab-akibat!"</em></p>
-           <p style="margin-bottom:10px; color:#cbd5e1;">Bagaimana kamu membuktikan secara metodologis bahwa peristiwa tersebut adalah <strong>Kausalitas murni</strong>?</p>
-           <button class="quiz-option" onclick="submitC3Quiz(1, 'benar')">A. Menunjukkan bukti mekanisme fisik langsung (surat sita & armada kereta) yang secara nyata memindahkan pasokan dari desa ke pusat.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(1, 'salah1')">B. Menyatakan bahwa setiap ada dua kejadian yang berdekatan waktunya, secara otomatis pasti ada hubungan kausalitas.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(1, 'salah2')">C. Mengandalkan pengakuan lisan para pejabat yang merasa curiga atas situasi di lapangan.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(1, 'salah3')">D. Membandingkan grafik luas wilayah dengan total konsumsi rata-rata penduduk.</button>
+          `<p style="margin-bottom:10px; color:#cbd5e1;">Adipati berkilah: <em>"Banyak variabel bergerak berbarengan di dunia ini tanpa ada kaitan! Hubungan antara keterbukaan arsip dan minimnya beras cuma korelasi semu tanpa sebab-akibat!"</em></p>
+           <p style="margin-bottom:10px; color:#cbd5e1;">Bagaimana kamu membuktikan secara metodologis bahwa peristiwa tersebut merupakan <strong>Kausalitas murni</strong>?</p>
+           <button class="quiz-option" onclick="submitC3Quiz(1, 'benar')">A. Menunjukkan bukti mekanisme fisik langsung (surat perintah sita & armada kereta) yang menjadi jembatan aksi pemindahan pasokan secara paksa.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(1, 'salah1')">B. Menyatakan bahwa setiap ada dua kejadian yang berdekatan waktunya, secara otomatis pasti ada hubungan sebab-akibat.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(1, 'salah2')">C. Mengandalkan pengakuan lisan para saksi yang mencurigai situasi tanpa bukti material.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(1, 'salah3')">D. Membandingkan rata-rata konsumsi pangan dengan persentase luas lahan pertanian.</button>
           `, "Tutup");
       } else if (gameState.c3.stage === 2) {
-        showModal("Sidang Vonis Tahap 2: Pembuktian Arah Korelasi",
-          `<p style="margin-bottom:10px; color:#cbd5e1;">Hakim meminta analis membacakan kesimpulan hubungan variabel: <em>"Bagaimana pola matematis antara penimbunan lumbung pusat ($X$) terhadap tingkat kesejahteraan desa ($Y$)?"</em></p>
-           <button class="quiz-option" onclick="submitC3Quiz(2, 'salah1')">A. Korelasi Positif, karena penumpukan pangan pusat menaikkan angka rata-rata total di atas kertas.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(2, 'benar')">B. Korelasi Negatif, karena peningkatan timbunan di pusat secara berlawanan arah menekan habis kesejahteraan desa.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(2, 'salah2')">C. Korelasi Nol (Tidak Berhubungan), karena data kedua variabel diukur dalam satuan metrik yang berbeda.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(2, 'salah3')">D. Korelasi Semu, karena fluktuasi pangan murni dikendalikan oleh perubahan iklim tahunan.</button>
+        showModal("Sidang Vonis Tahap 2: Pembuktian Arah Hubungan Variabel",
+          `<p style="margin-bottom:10px; color:#cbd5e1;">Hakim meminta analis menyimpulkan arah hubungan empiris: <em>"Berdasarkan analisis sifat data temuan lembaga penelitian, pola korelasi apa yang tergambar kuat antara variabel 'Tingkat Transparansi' dengan 'Kasus Korupsi' yang dilakukan para pejabat?"</em></p>
+           <button class="quiz-option" onclick="submitC3Quiz(2, 'salah1')">A. Korelasi Positif, karena semakin tinggi keterbukaan arsip, semakin banyak celah manipulasi baru yang tercipta.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(2, 'benar')">B. Korelasi Negatif, karena peningkatan transparansi sistem secara berlawanan arah terbukti menekan dan mempersempit ruang terjadinya kasus korupsi.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(2, 'salah2')">C. Korelasi Nol (Tidak Berhubungan), karena transparansi adalah variabel kualitatif sedangkan kasus korupsi dihitung secara numerik.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(2, 'salah3')">D. Korelasi Acak, karena penindakan kasus korupsi murni bergantung pada faktor keberuntungan pemeriksaan.</button>
           `, "Tutup");
       } else {
         showModal("Sidang Vonis Tahap Akhir: Putusan Perkara",
           `<p style="margin-bottom:10px; color:#cbd5e1;">Berdasarkan seluruh rangkaian bukti literasi data (pembongkaran bias rata-rata, pemulihan skala median, pembongkaran survei fiktif, serta validasi kausalitas dan korelasi negatif), apa vonis akhir yang sah?</p>
            <button class="quiz-option" onclick="submitC3Quiz(3, 'salah1')">A. Masalah ini merupakan bencana alam murni yang memicu kepanikan logistik warga.</button>
            <button class="quiz-option" onclick="submitC3Quiz(3, 'salah2')">B. Kesalahan utama terletak pada juru gambar laporan karena salah memilih jenis diagram batang.</button>
-           <button class="quiz-option" onclick="submitC3Quiz(3, 'benar')">C. Terbukti terjadi monopoli pasokan terencana yang berkorelasi negatif terhadap rakyat, yang sengaja ditutupi manipulasi visual dan statistik.</button>
+           <button class="quiz-option" onclick="submitC3Quiz(3, 'benar')">C. Terbukti terjadi monopoli pasokan terencana yang sengaja ditutupi manipulasi visual skala sumbu, penipuan sampel survei, dan perusakan transparansi data.</button>
            <button class="quiz-option" onclick="submitC3Quiz(3, 'salah3')">D. Krisis terjadi semata-mata karena jumlah sampel sensus yang kurang memadai.</button>
           `, "Tutup");
       }
