@@ -142,7 +142,14 @@
       font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; width: 100%; font-family: 'Segoe UI', sans-serif;
     }
     .btn-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
-
+.vn-dialogue-box {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: rgba(15, 23, 42, 0.85); border: 1px solid var(--accent-cyan);
+      border-radius: 8px; padding: 12px 14px;
+    }
+    .vn-avatar { font-size: 1.8rem; line-height: 1; }
+    .vn-speaker { font-size: 0.85rem; font-weight: bold; margin-bottom: 4px; }
+    .vn-text { font-size: 0.9rem; line-height: 1.45; color: #cbd5e1; }
     /* Modals */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(3, 7, 19, 0.85); backdrop-filter: blur(4px); display: flex;
@@ -346,74 +353,78 @@ function stopClear() { sounds.clear.pause(); sounds.clear.currentTime = 0; }
 
     function closeModal() { modalPopup.classList.add("hidden"); }
 
-    /* =========================================================
-       1. INTRO
-       ========================================================= */
-  function loadIntro() {
+function loadIntro() {
       stopClear();
       
       document.body.classList.remove("critical-siri"); gameState.chapter = "intro"; gameState.siri = 100;
       gameState.savedTimeSec = 0;
       gameState.c1 = { bagSorted: false, rangeLearned: false, ready: false, stage: 1 };
       gameState.c2 = { graphFixed: false, medianLearned: false, ready: false, stage: 1 };
-      gameState.c3 = { auditRead: false, timelineFixed: false, ready: false, stage: 1 };
+      gameState.c3 = { auditRead: false, correlationFixed: false, ready: false, stage: 1 };
       clearInterval(gameState.timerInterval); clearTimeout(gameState.hintTimeout);
       
       updateSiri(0); chapterDisplay.innerText = "Pendahuluan"; timerDisplay.innerText = "Waktu: --:--";
       sceneCanvas.classList.add("hidden"); document.getElementById('log-panel').classList.add("hidden");
       document.getElementById('game-body').classList.add("full-width-body");
 
-      // TAHAP 1: KONTEKS CERITA
+      // TAHAP 1: KONTEKS CERITA & TUJUAN EDUKASI
       leftPanel.innerHTML = `
         <div class="intro-hero-panel">
           <div class="intro-content">
-            <h2 style="color:var(--accent-gold); font-size:1.5rem; margin-bottom:16px;">Buku Catatan Numera Cyri</h2>
+            <h2 style="color:var(--accent-gold); font-size:1.5rem; margin-bottom:6px;">Buku Catatan Numera Cyri</h2>
+            <div style="font-size:0.85rem; color:var(--accent-cyan); font-weight:600; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.5px;">
+              Petualangan Edukasi Literasi Data & Statistika Dasar
+            </div>
             
-            <div class="vn-dialogue-box" style="margin-bottom:12px; border-color:var(--accent-cyan);">
+            <div class="book-card" style="border-left-color:var(--accent-cyan); background:rgba(15,23,42,0.9); font-size:0.88rem; margin-bottom:12px;">
+              <strong>🎯 Tujuan Game Ini:</strong> Melatih kemampuan berpikir kritis dalam memahami konsep <strong>Statistika Dasar</strong> (Pencilan, Rata-rata vs Median, Distorsi Grafik, Validitas Sampel, serta Korelasi & Kausalitas) guna membongkar manipulasi data di kehidupan nyata.
+            </div>
+
+            <div class="vn-dialogue-box" style="margin-bottom:10px; border-color:var(--accent-cyan);">
               <div class="vn-avatar">📜</div>
               <div>
                 <div class="vn-speaker" style="color:var(--accent-cyan);">Latar Belakang Kasus</div>
-                <div class="vn-text">"Krisis kelaparan tiba-tiba melanda desa-desa pinggiran. Anehnya, laporan statistik resmi dari Adipati Wilayah Pusat mengklaim bahwa pasokan pangan kerajaan sangat melimpah dan adil. Pasti ada sesuatu yang dimanipulasi di balik angka-angka tersebut."</div>
+                <div class="vn-text">"Krisis kelaparan melanda desa-desa pinggiran. Namun, laporan statistik resmi Adipati Wilayah Pusat mengklaim pasokan pangan sangat melimpah dan merata dengan angka rata-rata palsu."</div>
               </div>
             </div>
 
-            <div class="vn-dialogue-box" style="margin-bottom:16px; border-color:var(--accent-red);">
+            <div class="vn-dialogue-box" style="margin-bottom:14px; border-color:var(--accent-red);">
               <div class="vn-avatar">🕵️</div>
               <div>
-                <div class="vn-speaker" style="color:var(--accent-red);">Misi Penyelidik (Kamu)</div>
-                <div class="vn-text">"Raja memanggilmu sebagai Analis Data Independen. Tugasmu: Periksa data mentah di lumbung, bongkar ilusi manipulasi grafik sang Adipati, dan buktikan kejahatannya di meja persidangan!"</div>
+                <div class="vn-speaker" style="color:var(--accent-red);">Peran Pemain</div>
+                <div class="vn-text">"Raja menunjukmu sebagai Analis Data Independen. Gunakan prinsip statistika murni untuk merekonstruksi data, membuka kepalsuan grafik, dan menegakkan keadilan di meja sidang!"</div>
               </div>
             </div>
 
-            <button class="btn-action" onclick="showIntroGuide()" style="margin-top:14px; padding:14px;">Lanjut Membaca Petunjuk ➔</button>
+            <button class="btn-action" onclick="showIntroGuide()" style="padding:14px;">Lanjut Membaca Petunjuk ➔</button>
           </div>
         </div>
       `;
     }
 
-    // TAHAP 2: PETUNJUK BERMAIN
+    // TAHAP 2: PETUNJUK MATERI STATISTIKA & CARA BERMAIN
     function showIntroGuide() {
-      playSound('click'); // Memutar SFX klik (opsional)
+      playSound('click');
       leftPanel.innerHTML = `
         <div class="intro-hero-panel">
           <div class="intro-content">
-            <h2 style="color:var(--accent-gold); font-size:1.5rem; margin-bottom:16px;">Petunjuk Investigasi</h2>
+            <h2 style="color:var(--accent-gold); font-size:1.4rem; margin-bottom:12px;">Petunjuk & Materi yang Dipelajari</h2>
 
-            <div class="book-card" style="border-left-color: var(--accent-gold); background:rgba(15,23,42,0.9); font-size:0.9rem;">
-              <strong>Siri'</strong> adalah prinsip harga diri dan kejujuran mutlak terhadap fakta. 
-              Jagalah <strong>Bilah Integritas Siri'</strong> milikmu agar tidak terkuras habis akibat kesalahan analisis dalam batas waktu <strong>8 Menit</strong> per bab.
+            <div class="book-card" style="border-left-color:var(--accent-gold); background:rgba(15,23,42,0.9); font-size:0.85rem; margin-bottom:10px;">
+              <strong>Prinsip Integritas Siri':</strong> 
+              Menjaga kejujuran mutlak terhadap data faktual. Hindari kesalahan logika agar <strong>Bilah Siri'</strong> tidak runtuh dalam batas waktu <strong>8 Menit</strong> per bab.
             </div>
 
-            <div class="book-card" style="border-left-color: var(--accent-green); background:rgba(15,23,42,0.85); font-size:0.9rem;">
-              <strong>Langkah Investigasi:</strong>
-              <br>1. Buka <strong>Alat Praktik Lapangan [ ! ]</strong> untuk mengklasifikasi data mentah.
-              <br>2. Pelajari <strong>Analisis Teori [ ! ]</strong> mengenai prinsip logika statistika.
-              <br>3. Gunakan temuanmu di meja <strong>Evaluasi Sidang [ ★ ]</strong> untuk mematahkan argumen Adipati!
+            <div class="book-card" style="border-left-color:var(--accent-green); background:rgba(15,23,42,0.85); font-size:0.85rem; line-height:1.6;">
+              <strong>Modul Pembelajaran Statistik:</strong><br>
+              • <strong>Bab 1:</strong> Identifikasi Pencilan <em>(Outlier)</em> & Kerentanan Rata-Rata <em>(Mean Bias)</em>.<br>
+              • <strong>Bab 2:</strong> Ketangguhan <em>Median</em>, Ilusi Skala Grafik, & Validitas Sampel vs Populasi.<br>
+              • <strong>Bab 3:</strong> Hubungan Sebab-Akibat <em>(Kausalitas)</em> & Menentukan Arah <em>Korelasi</em> (Positif/Negatif).
             </div>
 
-            <div style="display:flex; gap:10px; margin-top:16px;">
+            <div style="display:flex; gap:10px; margin-top:14px;">
               <button class="btn-action" onclick="loadIntro()" style="background:#334155; color:#f8fafc; flex:1;">⬅ Kembali</button>
-              <button class="btn-action" onclick="loadChapter1()" style="flex:2;">Terima Misi & Buka Berkas ➔</button>
+              <button class="btn-action" onclick="loadChapter1()" style="flex:2;">Mulai Belajar & Selidiki ➔</button>
             </div>
           </div>
         </div>
@@ -664,8 +675,8 @@ function loadChapter2() {
         <div class="hotspot" style="top: 35%; left: 45%; width: 20%; height: 50%;" onclick="viewMedianGraph()">
           <span class="hotspot-label">${lB}</span>
         </div>
-        <!-- BUG FIX: Pemanggilan Quiz() yang benar -->
-        <div class="hotspot quiz-hotspot ${cls}" style="top: 15%; left: 30%; width: 38%; height: 32%;" onclick="Quiz()">
+        <!-- PERBAIKAN: openChapter2Quiz() -->
+        <div class="hotspot quiz-hotspot ${cls}" style="top: 15%; left: 30%; width: 38%; height: 32%;" onclick="openChapter2Quiz()">
           <span class="hotspot-label">${lbl}</span>
         </div>
       `;
