@@ -31,14 +31,15 @@
       overflow-x: hidden;
     }
 
-.median-bar {
+    .median-bar {
       border-radius: 4px; cursor: pointer; transition: filter 0.2s, transform 0.2s;
     }
     .median-bar:hover {
       filter: brightness(1.3); transform: scaleY(1.2) translateX(2px);
       box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
     }
-        .screen-flash {
+
+    .screen-flash {
       position: fixed; inset: 0; background: white; opacity: 0;
       pointer-events: none; z-index: 99999; transition: opacity 0.05s ease-out;
     }
@@ -104,7 +105,9 @@
     .quiz-hotspot .hotspot-label { color: var(--accent-gold); border-color: rgba(251, 191, 36, 0.6); }
     .quiz-hotspot.locked { opacity: 0.6; }
     .quiz-hotspot.locked .hotspot-label { color: #94a3b8; border-color: #64748b; background: rgba(15, 23, 42, 0.95); }
-.drag-bag {
+
+    /* Drag and Drop Karung */
+    .drag-bag {
       display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px;
       background: #1e293b; border: 2px solid #64748b; color: #f8fafc; border-radius: 6px;
       cursor: pointer; font-weight: 500; font-size: 0.85rem; user-select: none;
@@ -117,6 +120,7 @@
       cursor: pointer;
     }
     .drop-box:hover, .drop-box:active { border-color: var(--accent-cyan); background: rgba(56, 189, 248, 0.1); }
+
     /* Layout Panel Bawah */
     .game-body { padding: 16px 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
     .full-width-body { grid-template-columns: 1fr; }
@@ -142,7 +146,9 @@
       font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.2s; width: 100%; font-family: 'Segoe UI', sans-serif;
     }
     .btn-action:hover { filter: brightness(1.15); transform: translateY(-1px); }
-.vn-dialogue-box {
+
+    /* Dialog Story / Visual Novel */
+    .vn-dialogue-box {
       display: flex; gap: 12px; align-items: flex-start;
       background: rgba(15, 23, 42, 0.85); border: 1px solid var(--accent-cyan);
       border-radius: 8px; padding: 12px 14px;
@@ -150,6 +156,7 @@
     .vn-avatar { font-size: 1.8rem; line-height: 1; }
     .vn-speaker { font-size: 0.85rem; font-weight: bold; margin-bottom: 4px; }
     .vn-text { font-size: 0.9rem; line-height: 1.45; color: #cbd5e1; }
+
     /* Modals */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(3, 7, 19, 0.85); backdrop-filter: blur(4px); display: flex;
@@ -165,7 +172,6 @@
       border-radius: 6px; margin: 12px 0; font-size: 0.95rem; line-height: 1.5; color: #e2e8f0;
     }
 
-    /* Kuis Klasik (A/B/C/D) */
     .quiz-option {
       background: #0f172a; border: 1px solid #475569; color: #f8fafc; padding: 12px 16px;
       border-radius: 8px; font-size: 0.92rem; text-align: left; cursor: pointer; width: 100%; margin-top: 10px;
@@ -196,19 +202,6 @@
     .badge-icon { font-size: 1.3rem; }
     .badge-title { font-weight: bold; color: var(--accent-gold); font-size: 0.8rem; }
     .badge-desc { font-size: 0.7rem; color: #94a3b8; }
-
-    /* Drag and Drop Karung (Visual Profesional) */
-    .drag-bag {
-      display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px;
-      background: #1e293b; border: 1px solid #64748b; color: #f8fafc; border-radius: 6px;
-      cursor: grab; font-weight: 500; font-size: 0.85rem; user-select: none; touch-action: none;
-    }
-    .drag-bag:active { cursor: grabbing; opacity: 0.7; }
-    .drop-box {
-      border: 2px dashed #475569; background: rgba(15, 23, 42, 0.4); border-radius: 8px; padding: 12px;
-      min-height: 60px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; transition: all 0.2s;
-    }
-    .drop-box.drag-over { border-color: var(--accent-cyan); background: rgba(56, 189, 248, 0.1); }
   </style>
 </head>
 <body>
@@ -256,10 +249,12 @@
     sounds.bgm.loop = true; sounds.bgm.volume = 0.9;
     sounds.clear.loop = true; 
     sounds.clear.volume = 0.55;
+
     function playSound(name) { if (sounds[name]) { sounds[name].currentTime = 0; sounds[name].play().catch(() => {}); } }
     function playBGM() { sounds.bgm.play().catch(() => {}); }
     function stopBGM() { sounds.bgm.pause(); sounds.bgm.currentTime = 0; }
-function stopClear() { sounds.clear.pause(); sounds.clear.currentTime = 0; }
+    function stopClear() { sounds.clear.pause(); sounds.clear.currentTime = 0; }
+
     function triggerShake() {
       const container = document.getElementById("game-container");
       container.classList.add("shake");
@@ -278,7 +273,7 @@ function stopClear() { sounds.clear.pause(); sounds.clear.currentTime = 0; }
       chapter: "intro", siri: 100, timerSec: 480, timerInterval: null, hintTimeout: null, savedTimeSec: 0,
       c1: { bagSorted: false, rangeLearned: false, ready: false, stage: 1 },
       c2: { graphFixed: false, medianLearned: false, ready: false, stage: 1 },
-      c3: { auditRead: false, timelineFixed: false, ready: false, stage: 1 }
+      c3: { auditRead: false, correlationFixed: false, ready: false, stage: 1 }
     };
 
     const sceneCanvas = document.getElementById("scene-canvas");
@@ -325,7 +320,7 @@ function stopClear() { sounds.clear.pause(); sounds.clear.currentTime = 0; }
       return false;
     }
 
-    function startTimer(minutes, onExpire) {
+    function startTimer(minutes) {
       clearInterval(gameState.timerInterval); gameState.timerSec = minutes * 60;
       gameState.timerInterval = setInterval(() => {
         gameState.timerSec--;
@@ -353,7 +348,10 @@ function stopClear() { sounds.clear.pause(); sounds.clear.currentTime = 0; }
 
     function closeModal() { modalPopup.classList.add("hidden"); }
 
-function loadIntro() {
+    /* =========================================================
+       1. INTRO
+       ========================================================= */
+    function loadIntro() {
       stopClear();
       
       document.body.classList.remove("critical-siri"); gameState.chapter = "intro"; gameState.siri = 100;
@@ -367,7 +365,6 @@ function loadIntro() {
       sceneCanvas.classList.add("hidden"); document.getElementById('log-panel').classList.add("hidden");
       document.getElementById('game-body').classList.add("full-width-body");
 
-      // TAHAP 1: KONTEKS CERITA & TUJUAN EDUKASI
       leftPanel.innerHTML = `
         <div class="intro-hero-panel">
           <div class="intro-content">
@@ -377,7 +374,7 @@ function loadIntro() {
             </div>
             
             <div class="book-card" style="border-left-color:var(--accent-cyan); background:rgba(15,23,42,0.9); font-size:0.88rem; margin-bottom:12px;">
-              <strong>🎯 Tujuan Game Ini:</strong> Melatih kemampuan berpikir kritis dalam memahami konsep <strong>Statistika Dasar</strong> (Pencilan, Rata-rata vs Median, Distorsi Grafik, Validitas Sampel, serta Korelasi & Kausalitas) guna membongkar manipulasi data di kehidupan nyata.
+              <strong>🎯 Tujuan Pembelajaran:</strong> Melatih kemampuan berpikir kritis dalam memahami konsep <strong>Statistika Dasar</strong> (Pencilan, Rata-rata vs Median, Distorsi Grafik, Validitas Sampel, serta Korelasi & Kausalitas) guna membongkar manipulasi data di kehidupan nyata.
             </div>
 
             <div class="vn-dialogue-box" style="margin-bottom:10px; border-color:var(--accent-cyan);">
@@ -402,9 +399,8 @@ function loadIntro() {
       `;
     }
 
-    // TAHAP 2: PETUNJUK MATERI STATISTIKA & CARA BERMAIN
     function showIntroGuide() {
-      playSound('click');
+      playSound('lampu');
       leftPanel.innerHTML = `
         <div class="intro-hero-panel">
           <div class="intro-content">
@@ -476,7 +472,7 @@ function loadIntro() {
     function viewDocA() {
       if(gameState.c1.bagSorted) { playSound('buku'); showModal("Arsip Lapangan", "Data 212 Ton telah dipisahkan dari kelompok wajar."); return; }
       playSound('buku');
-      selectedBagId = null; // Reset saat dibuka
+      selectedBagId = null;
       showModal("Alat Klasifikasi Data Lapangan",
         `<p style="margin-bottom:12px; font-size:0.95rem; color:#cbd5e1;"><strong>Klik karung yang ingin dipindah</strong>, lalu <strong>Klik kotak tujuannya</strong>:</p>
          
@@ -503,23 +499,21 @@ function loadIntro() {
       );
     }
 
-function selectBag(id) {
-      playSound('click');
+    function selectBag(id) {
+      playSound('lampu');
       selectedBagId = id;
       
-      // Reset warna hanya pada karung yang belum dipindah (masih di source-zone)
       document.querySelectorAll('#source-zone .drag-bag').forEach(b => {
         b.style.borderColor = '#64748b';
         b.style.background = '#1e293b';
       });
       
-      // Beri efek nyala (highlight) pada karung yang sedang dipilih
       document.getElementById(id).style.borderColor = 'var(--accent-gold)';
       document.getElementById(id).style.background = 'rgba(251, 191, 36, 0.2)';
     }
 
     function handleTapDrop(targetZone) {
-      if (!selectedBagId) return; // Abaikan jika belum memilih karung apa-apa
+      if (!selectedBagId) return;
       const bagEl = document.getElementById(selectedBagId);
       const val = parseInt(bagEl.getAttribute('data-val'));
 
@@ -534,13 +528,11 @@ function selectBag(id) {
         return; 
       }
       
-      // Pindahkan elemen karung ke kotak tujuan
       document.getElementById(targetZone + '-zone').appendChild(bagEl);
       
-      // KUNCI KARUNG: Matikan highlight dan matikan pointer agar klik tembus ke kotak
       bagEl.style.borderColor = 'var(--accent-green)';
       bagEl.style.background = 'rgba(34, 197, 94, 0.1)';
-      bagEl.style.pointerEvents = 'none'; // <-- Membuat klik tembus ke kotak di bawahnya
+      bagEl.style.pointerEvents = 'none';
       bagEl.style.cursor = 'default';
       
       selectedBagId = null;
@@ -548,7 +540,6 @@ function selectBag(id) {
       
       if (document.getElementById('normal-zone').children.length === 4 && document.getElementById('outlier-zone').children.length === 1) {
         gameState.c1.bagSorted = true; checkC1Ready();
-        // FEEDBACK NUMERASI KUAT
         document.getElementById('c1-feedback').style.borderLeftColor = "var(--accent-green)";
         document.getElementById('c1-feedback').innerHTML = `
           <strong style="color:var(--accent-green);">Klasifikasi Berhasil. Perhatikan Kalkulasi Ini:</strong><br>
@@ -559,7 +550,6 @@ function selectBag(id) {
       }
     }
 
-    // Sub-Task 1B: Konsep Rentang (Mini Quiz Teori)
     function viewDocB() {
       if(gameState.c1.rangeLearned) { playSound('buku'); showModal("Konsep Rentang", "Rentang data pasokan yang lebar membuktikan ketimpangan ekstrem yang ditutupi oleh rata-rata 80 Ton."); return; }
       playSound('buku');
@@ -573,6 +563,7 @@ function selectBag(id) {
         `, "Tutup"
       );
     }
+
     function answerC1Range(ans) {
       if(ans === 'benar') {
         playSound('correct'); gameState.c1.rangeLearned = true; checkC1Ready();
@@ -582,10 +573,9 @@ function selectBag(id) {
       }
     }
 
-    // KUIS EVALUASI BAB 1 (Penalaran Pilihan Ganda Asli)
     function openChapter1Quiz() {
       if (!gameState.c1.ready) { playSound('wrong'); alert("Gunakan alat klasifikasi dan pelajari teori rentang terlebih dahulu!"); return; }
-      playSound('buku');
+      playSound('lampu');
       if (gameState.c1.stage === 1) {
         showModal("Evaluasi Tahap 1: Identifikasi Data",
           `<p style="margin-bottom:10px; color:#cbd5e1;">Berdasarkan hasil klasifikasimu: 44, 44, 48, 52, dan <strong style="color:var(--accent-red);">212</strong>.<br>Dalam statistika resmi, apa sebutan teknis untuk angka 212 ton yang posisinya terasing jauh dari kawanannya ini?</p>
@@ -646,7 +636,7 @@ function selectBag(id) {
     /* =========================================================
        3. BAB 2: SKALA GRAFIK & MEDIAN
        ========================================================= */
-function loadChapter2() {
+    function loadChapter2() {
       stopClear();
       playBGM();
       gameState.chapter = "c2"; chapterDisplay.innerText = "Bab 2"; sceneCanvas.style.backgroundImage = "url('22.png')";
@@ -675,16 +665,15 @@ function loadChapter2() {
         <div class="hotspot" style="top: 35%; left: 45%; width: 20%; height: 50%;" onclick="viewMedianGraph()">
           <span class="hotspot-label">${lB}</span>
         </div>
-        <!-- PERBAIKAN: openChapter2Quiz() -->
         <div class="hotspot quiz-hotspot ${cls}" style="top: 15%; left: 30%; width: 38%; height: 32%;" onclick="openChapter2Quiz()">
           <span class="hotspot-label">${lbl}</span>
         </div>
       `;
     }
 
-function viewMedianGraph() {
+    function viewMedianGraph() {
       if(gameState.c2.medianLearned) { playSound('buku'); showModal("Median Visual", "Median 48 Ton adalah indikator faktual yang kebal terhadap manipulasi batang ekstrem."); return; }
-      playSound('buku');
+      playSound('grafik');
       showModal("Alat Visual: Identifikasi Titik Tengah (Median)",
         `<p style="font-size:0.95rem; color:#cbd5e1; margin-bottom:8px;">Rata-rata 80 Ton telah terbukti bias karena ditarik naik oleh dominasi 53% milik Adipati. Untuk mengukur kondisi faktual mayoritas rakyat, analis independen menggunakan <strong>Median (Nilai Tengah)</strong>.</p>
          <div class="book-card" style="border-left-color:var(--accent-cyan); font-size:0.85rem; margin-top:0;">
@@ -723,13 +712,13 @@ function viewMedianGraph() {
         `, "Tutup"
       );
     }
+
     function checkMedianClick(val) {
       if (val === 48) {
         playSound('correct');
         gameState.c2.medianLearned = true;
         checkC2Ready();
         
-        // Mematikan klik setelah berhasil
         document.querySelectorAll('.median-bar').forEach(b => b.style.pointerEvents = 'none');
         
         document.getElementById('c2-median-fb').style.borderLeftColor = "var(--accent-green)";
@@ -747,7 +736,6 @@ function viewMedianGraph() {
       }
     }
 
-    // INTERAKSI BAB 2: Slider Grafik (Memunculkan Numerasi Persentase)
     function viewGraph() {
       if(gameState.c2.graphFixed) { playSound('buku'); showModal("Grafik Direkonstruksi", "Skala asli grafik telah dipulihkan."); return; }
       playSound('grafik');
@@ -764,6 +752,7 @@ function viewMedianGraph() {
         `, "Tutup"
       );
     }
+
     function updateBars(max) {
       document.getElementById("c2-val").innerText = max;
       [44,44,48,52,212].forEach((v,i) => document.getElementById("bar-"+i).style.width = Math.min(100, Math.round((v/max)*100)) + "%");
@@ -772,7 +761,6 @@ function viewMedianGraph() {
         if (!gameState.c2.graphFixed) {
           gameState.c2.graphFixed = true; checkC2Ready();
         }
-        // FEEDBACK NUMERASI KUAT
         box.style.borderLeftColor = "var(--accent-green)"; 
         box.innerHTML = `
           <strong style="color:var(--accent-green);">VISUAL ASLI TERBONGKAR!</strong><br>
@@ -784,30 +772,6 @@ function viewMedianGraph() {
       }
     }
 
-    // Sub-Task 2B: Teori Median
-    function viewRuneInfo() {
-      if(gameState.c2.medianLearned) { playSound('buku'); showModal("Konsep Titik Tengah", "Median 48 Ton adalah indikator yang jujur membelah populasi wajar."); return; }
-      playSound('buku');
-      showModal("Analisis Teori: Titik Tengah (Median)",
-        `<div class="book-card" style="margin-top:0;"><strong>Fakta Lapangan:</strong> Wilayah kelima menguasai 53% pasokan (212 Ton). Karena rata-rata 80 Ton terbukti bias, kita mencari angka yang mengurutkan data dari terkecil ke terbesar dan mengambil posisi pas di tengah barisan.</div>
-         <p style="font-size:0.9rem; margin-top:5px;">Jika datanya diurutkan (44, 44, 48, 52, 212), mengapa secara logika <strong>Median (48 Ton)</strong> ini menjadi pilihan terbaik untuk mewakili kondisi mayoritas (4 dari 5 desa)?</p>
-         <button class="quiz-option" onclick="answerC2Median('salah1')">A. Median selalu menghasilkan angka numerik yang lebih tinggi untuk menyenangi penguasa.</button>
-         <button class="quiz-option" onclick="answerC2Median('salah2')">B. Median bekerja dengan cara membuang dan menghapus data yang tidak diinginkan.</button>
-         <button class="quiz-option" onclick="answerC2Median('benar')">C. Median kebal terhadap tarikan ekstrem dominasi 53% tersebut, dan tetap berada di pusat wajar.</button>
-         <button class="quiz-option" onclick="answerC2Median('salah3')">D. Median adalah syarat penulisan laporan mutlak yang disahkan peradilan sejak dulu.</button>
-        `, "Tutup"
-      );
-    }
-    function answerC2Median(ans) {
-      if(ans === 'benar') {
-        playSound('correct'); gameState.c2.medianLearned = true; checkC2Ready();
-        showModal("Benar!", `<div class="book-card" style="border-left-color:var(--accent-green);">Tepat! Nilai 48 Ton (Median) jauh lebih jujur mewakili porsi 4 dari 5 wilayah karena posisinya di tengah tidak peduli dengan besarnya volume anomali di ujung data.</div>`);
-      } else {
-        playSound('wrong'); updateSiri(-5); alert("Salah! Ingat fungsi Median yang paling kuat: Ia tidak peduli seberapa raksasa nilai di ujung, posisinya tetap kokoh di tengah! (-5% Siri')");
-      }
-    }
-
-   // KUIS EVALUASI BAB 2 (Tahap 2: Survei Hantu, Tahap 3: Pengalihan Indikator)
     function openChapter2Quiz() {
       if (!gameState.c2.ready) { playSound('wrong'); alert("Gunakan alat rekonstruksi grafik terlebih dahulu!"); return; }
       playSound('lampu');
@@ -820,7 +784,6 @@ function viewMedianGraph() {
            <button class="quiz-option" onclick="submitC2Quiz(1, 'salah3')">D. Grafik batang akan otomatis terkonversi menjadi bentuk diagram lingkaran (pie chart).</button>
           `, "Tutup");
       } else if (gameState.c2.stage === 2) {
-        // -- TAHAP 2: ANOMALI SAMPEL VS POPULASI ("SURVEI HANTU") --
         showModal("Evaluasi Tahap 2: Validitas Data Sampel",
           `<div class="book-card" style="margin-top:0; border-left-color:var(--accent-red);">
             <strong>Bantahan Adipati:</strong> "Tuduhan kalian tidak berdasar! Lihat hasil survei petisi resmi ini: <strong>25.000 kepala keluarga di 5 wilayah</strong> menyatakan setuju pasokan mereka dipusatkan ke lumbung utama demi masa depan!"
@@ -833,7 +796,6 @@ function viewMedianGraph() {
            <button class="quiz-option" onclick="submitC2Quiz(2, 'salah3')">D. Petisi seharusnya menggunakan perhitungan Median agar suara minoritas tetap terwakili.</button>
           `, "Tutup");
       } else {
-        // -- TAHAP 3: PENGALIHAN INDIKATOR (CHERRY-PICKING METRICS) --
         showModal("Evaluasi Tahap 3: Pengalihan Indikator Data",
           `<div class="book-card" style="margin-top:0; border-left-color:var(--accent-red);"><strong>Bantahan Adipati:</strong> "Baiklah, mungkin batas grafiknya keliru. Tapi lihat grafik baruku ini! Batangnya menjulang tinggi menembus target! Ini bukti program kita sukses besar!"</div>
            <p style="margin-bottom:10px; color:#cbd5e1;">Kamu meneliti grafik baru yang diklaim sangat sukses tersebut. Saat diperhatikan lebih jeli, tulisan kecil pada label indikatornya mencantumkan <strong>'Tingkat Angka Kelahiran'</strong>.</p>
@@ -877,9 +839,12 @@ function viewMedianGraph() {
       }
     }
 
-   function loadChapter3() {
-      stopClear(); // Menghentikan musik clear bab sebelumnya
-      playBGM();   // Memutar kembali musik latar investigasi
+    /* =========================================================
+       4. BAB 3: KAUSALITAS & ARAH KORELASI
+       ========================================================= */
+    function loadChapter3() {
+      stopClear();
+      playBGM();
       gameState.chapter = "c3"; chapterDisplay.innerText = "Bab 3"; sceneCanvas.style.backgroundImage = "url('31.png')";
       addLog("Bab 3: Kausalitas & Arah Korelasi."); startTimer(8);
       
@@ -926,7 +891,6 @@ function viewMedianGraph() {
       `;
     }
 
-    // INTERAKSI 1: Syarat Kausalitas (Mekanisme Fisik)
     function viewWarehouseAudit() {
       if(gameState.c3.auditRead) { playSound('buku'); showModal("Teori Mekanisme", "Bukti mekanisme fisik penggerak telah ditemukan. Alibi kebetulan semu berhasil dipatahkan."); return; }
       playSound('buku');
@@ -950,16 +914,16 @@ function viewMedianGraph() {
       }
     }
 
-  function viewCorrelationTool() {
+    function viewCorrelationTool() {
       if(gameState.c3.correlationFixed) { playSound('buku'); showModal("Arah Korelasi Teruji", "Kamu telah memahami analisis arah hubungan variabel secara empiris."); return; }
       playSound('grafik');
       showModal("Alat Uji: Analisis Arah Hubungan Variabel",
         `<p style="font-size:0.9rem; color:#cbd5e1; margin-bottom:10px;">Berdasarkan data audit berkala pengawasan kerajaan, perhatikan hubungan dua variabel empiris berikut:<br>
-          • <strong>Variabel $X$:</strong> <em>Indeks Transparansi & Keterbukaan Arsip Publik</em><br>
-          • <strong>Variabel $Y$:</strong> <em>Jumlah Temuan Kasus Korupsi & Penyelewengan Anggaran</em>
+          • <strong>Variabel X:</strong> <em>Indeks Transparansi & Keterbukaan Arsip Publik</em><br>
+          • <strong>Variabel Y:</strong> <em>Jumlah Temuan Kasus Korupsi & Penyelewengan Anggaran</em>
          </p>
          <div class="book-card" style="border-left-color:var(--accent-cyan); font-size:0.85rem; margin-top:0;">
-           <strong>Temuan Audit:</strong> Setiap kali tingkat keterbukaan sistem pengawasan dinaikkan tajam ($\uparrow$), angka penyimpangan dan kasus korupsi di wilayah tersebut tercatat anjlok menurun drastis ($\downarrow$).
+           <strong>Temuan Audit:</strong> Setiap kali tingkat keterbukaan sistem pengawasan dinaikkan tajam (↑), angka penyimpangan dan kasus korupsi di wilayah tersebut tercatat anjlok menurun drastis (↓).
          </div>
          <p style="font-size:0.9rem; margin-bottom:10px;">Berdasarkan analisis sifat pergerakan data tersebut, pola korelasi (hubungan) apa yang tergambar kuat antara variabel 'Transparansi' dengan 'Kasus Korupsi'?</p>
          <button class="quiz-option" onclick="submitCorrelationCheck('positif')">📈 Korelasi Positif (Kedua variabel bergerak searah; naiknya transparansi memicu kenaikan korupsi)</button>
@@ -985,7 +949,7 @@ function viewMedianGraph() {
       }
     }
 
-function openChapter3Quiz() {
+    function openChapter3Quiz() {
       if (!gameState.c3.ready) { playSound('wrong'); alert("Selesaikan uji kausalitas dan uji arah korelasi terlebih dahulu!"); return; }
       playSound('lampu');
       if (gameState.c3.stage === 1) {
@@ -1031,7 +995,7 @@ function openChapter3Quiz() {
           showModal("Tepat!", `<div class="book-card" style="border-left-color:var(--accent-green);">Pola menunjukkan <strong>Korelasi Negatif</strong>: kenaikan pada timbunan lumbung Adipati secara langsung menyebabkan penurunan drastis pada ketahanan pangan warga.</div>`, "Bacakan Keputusan Akhir ➔", () => openChapter3Quiz());
         } else {
           playSound('wrong'); if (updateSiri(-10)) return; addLog("Vonis 2 keliru.");
-          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Cermati arah geraknya: saat $X$ naik dan $Y$ turun, hubungannya adalah berlawanan arah (negatif). (-10% Siri')</div>`, "Coba Lagi", () => openChapter3Quiz());
+          showModal("Analisis Keliru", `<div class="book-card" style="border-left-color:var(--accent-red);">Cermati arah geraknya: saat X naik dan Y turun, hubungannya adalah berlawanan arah (negatif). (-10% Siri')</div>`, "Coba Lagi", () => openChapter3Quiz());
         }
       } else {
         if (choice === 'benar') {
@@ -1048,14 +1012,15 @@ function openChapter3Quiz() {
         }
       }
     }
+
     /* =========================================================
        5. OUTRO
        ========================================================= */
-function loadOutro() {
-  clearInterval(gameState.timerInterval); 
+    function loadOutro() {
+      clearInterval(gameState.timerInterval); 
       clearTimeout(gameState.hintTimeout);
       stopBGM(); 
-      playSound('clear'); // <--- SFX CLEAR DIPUTAR SAAT MASUK OUTRO
+      playSound('clear');
       
       gameState.chapter = "outro"; chapterDisplay.innerText = "Selesai";
       const usedSec = Math.max(0, (3 * 8 * 60) - (gameState.savedTimeSec || 0));
